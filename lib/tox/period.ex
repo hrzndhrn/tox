@@ -365,7 +365,7 @@ defmodule Tox.Period do
   defimpl Inspect do
     alias Tox.Period
 
-    @spec inspect(Period.t(), Keyword.t()) :: String.t()
+    @spec inspect(Period.t(), Inspect.Opts.t()) :: String.t()
     def inspect(period, _opts) do
       "#Tox.Period<#{to_string(period)}>"
     end

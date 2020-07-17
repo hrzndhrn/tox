@@ -351,7 +351,7 @@ defmodule Tox.Interval do
   defp is_valid?(_start, _ending, _boundaries), do: false
 
   defimpl Inspect do
-    @spec inspect(Tox.Interval.t(), Keyword.t()) :: String.t()
+    @spec inspect(Tox.Interval.t(), Inspect.Opts.t()) :: String.t()
     def inspect(interval, _opts) do
       "#Tox.Interval<#{to_string(interval)}>"
     end
