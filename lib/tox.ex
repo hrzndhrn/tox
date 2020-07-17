@@ -1,0 +1,45 @@
+defmodule Tox do
+  @moduledoc """
+  Some structs and functions to work with dates, times, durations, periods, and
+  intervals.
+  """
+
+  @typedoc """
+  Units related to dates and times.
+  """
+  @type unit ::
+          :year
+          | :month
+          | :week
+          | :day
+          | :hour
+          | :minute
+          | :second
+          | :microsecond
+
+  @typedoc """
+  An amount of time with a specified unit e.g. `{second: 500}`.
+  """
+  @type duration :: {unit(), integer()}
+
+  @typedoc """
+  Boundaries specifies whether the start and end of an interval are included or
+  excluded.
+
+  * `:open`: start and end are excluded
+  * `:closed`: start and end are included
+  * `:left_open`: start is excluded and end is included
+  * `:right_open`: start is included and end is excluded
+  """
+  @type boundaries :: :closed | :left_open | :right_open | :open
+
+  @doc false
+  @spec days_per_week :: integer()
+  def days_per_week, do: 7
+
+  @doc false
+  @spec week(Calendar.date()) :: {Calendar.year(), non_neg_integer()}
+  def week(%{calendar: Calendar.ISO, year: year, month: month, day: day}) do
+    :calendar.iso_week_number({year, month, day})
+  end
+end
