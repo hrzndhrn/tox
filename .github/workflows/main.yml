@@ -42,6 +42,7 @@ jobs:
       - name: Check if formatted
         if: ${{ contains(matrix.elixir_version, '1.10') }}
         run: mix format --check-formatted
+      - run: mix compile
       - name: Dialyzer
         run: mix dialyzer --halt-exit-status
       - run: MIX_ENV=test mix coveralls.github
