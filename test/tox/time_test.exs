@@ -18,7 +18,7 @@ defmodule Tox.TimeTest do
          second: second,
          microsecond: microsecond
        }) do
-      calendar.valid_time?(hour, minute, second, microsecond)
+    calendar.valid_time?(hour, minute, second, microsecond)
   end
 
   defp valid_time?(_datetime), do: false
