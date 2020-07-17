@@ -1,31 +1,46 @@
-name: Elixir CI
+name: CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [pull_request, push]
 
 jobs:
-  build:
-
-    name: Build and test
+  linux:
+    name: Test on Ubuntu (Elixir ${{ matrix.elixir_version }}, OTP ${{ matrix.otp_version }})
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        elixir_version: ['1.8.2', '1.9.4', '1.10.3']
+        otp_version: ['20.3', '21.3', '22.3']
+        exclude:
+          - elixir_version: '1.10.3'
+            otp_version: '20.3'
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Elixir
-      uses: actions/setup-elixir@v1
-      with:
-        elixir-version: '1.10.3' # Define the elixir version [required]
-        otp-version: '22.3' # Define the OTP version [required]
-    - name: Restore dependencies cache
-      uses: actions/cache@v2
-      with:
-        path: deps
-        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-        restore-keys: ${{ runner.os }}-mix-
-    - name: Install dependencies
-      run: mix deps.get
-    - name: Run tests
-      run: mix test
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Elixir
+        uses: actions/setup-elixir@v1
+        with:
+          elixir-version: ${{ matrix.elixir_version }}
+          otp-version: ${{ matrix.otp_version }}
+      - name: Restore deps and _build
+        uses: actions/cache@v2
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-mix-${{ matrix.elixir_version }}-${{ matrix.otp_version }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+      - name: Restore plts
+        uses: actions/cache@v2
+        with:
+          path: priv/plts
+          key: ${{ runner.os }}-dialyzer-${{ matrix.elixir_version }}-${{ matrix.otp_version }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+      - run: mix deps.get
+      - run: MIX_ENV=test mix compile --warnings-as-errors
+      - run: mix credo --strict
+      - name: Check if formatted
+        if: ${{ contains(matrix.elixir_version, '1.10') }}
+        run: mix format --check-formatted
+      - name: Dialyzer
+        run: mix dialyzer --halt-exit-status
+      - run: MIX_ENV=test mix coveralls.github
