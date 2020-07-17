@@ -97,7 +97,7 @@ defmodule Tox.MixProject do
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:stream_data, "~> 0.5", only: [:dev, :test]},
       {:time_zone_info, "~> 0.5", only: [:test, :dev]},
-      {:timex, "~> 3.6", only: [:test, :dev]}
+      {:timex, "~> 3.6", only: [:test, :dev], runtime: false}
     ]
   end
 end
