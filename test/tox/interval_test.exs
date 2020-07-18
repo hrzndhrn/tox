@@ -22,11 +22,7 @@ defmodule Tox.IntervalTest do
     end
 
     test "raises error for invalid interval with two datetimes" do
-      message =
-        "cannot create a new interval with " <>
-          "#DateTime<2020-07-11 08:06:00.123456Z>, " <>
-          "#DateTime<2020-07-11 08:06:00.123456Z>, " <>
-          "and :right_open reason: :invalid_interval"
+      message = ~r/cannot create.*reason: :invalid_interval/
 
       assert_raise ArgumentError, message, fn ->
         Tox.Interval.new!(
