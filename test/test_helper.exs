@@ -7,6 +7,6 @@ tzdb = TimeZoneInfo.TimeZoneDatabase
 
 Calendar.put_time_zone_database(tzdb)
 
-Mix.Shell.IO.info("time zone database: #{inspect tzdb} ")
+Mix.Shell.IO.info("time zone database: #{inspect(tzdb)} ")
 
 ExUnit.start(timeout: :infinity)
