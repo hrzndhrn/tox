@@ -96,7 +96,9 @@ defmodule Tox.MixProject do
       {:ex_cldr_calendars_persian, "~> 0.1", only: [:dev, :test]},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:stream_data, "~> 0.5", only: [:dev, :test]},
-      {:time_zone_info, "~> 0.5", only: [:test, :dev]}
+      {:time_zone_info, "~> 0.5", only: [:test, :dev]},
+      {:tz, "~> 0.10", only: [:test, :dev]},
+      {:tzdata, "~> 1.0", only: [:test, :dev]}
     ]
   end
 end
