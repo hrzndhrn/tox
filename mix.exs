@@ -48,7 +48,8 @@ defmodule Tox.MixProject do
         "lib",
         "mix.exs",
         "README*",
-        "LICENSE*"
+        "LICENSE*",
+        "CHANGELOG*"
       ]
     ]
   end
