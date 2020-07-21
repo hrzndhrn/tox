@@ -4,52 +4,53 @@ defmodule Tox.Date do
   """
 
   @doc """
-  Adds `durations` to the given `date`.
+  Shifts the `date` by the given `duration`.
+
 
   The `durations` is a keyword list of one or more durations of the type
   `Tox.duration` e.g. `[year: 1, month: 5, day: 500]`. All values will be
-  added from the largest to the smallest unit.
+  shifted from the largest to the smallest unit.
 
   ## Examples
 
       iex> date = ~D[1980-11-01]
-      iex> Tox.Date.add(date, year: 2)
+      iex> Tox.Date.shift(date, year: 2)
       ~D[1982-11-01]
-      iex> Tox.Date.add(date, year: -2, month: 1, day: 40)
+      iex> Tox.Date.shift(date, year: -2, month: 1, day: 40)
       ~D[1979-01-10]
       # time units will be ignored
-      iex> Tox.Date.add(date, hour: 100, minute: 10, second: 10)
+      iex> Tox.Date.shift(date, hour: 100, minute: 10, second: 10)
       ~D[1980-11-01]
 
   Adding a month at the end of the month can update the day too.
 
-      iex> Tox.Date.add(~D[2000-01-31], month: 1)
+      iex> Tox.Date.shift(~D[2000-01-31], month: 1)
       ~D[2000-02-29]
 
-  For that reason it is important to know that all values will be added from the
+  For that reason it is important to know that all values will be shifted from the
   largest to the smallest unit.
 
       iex> date = ~D[2000-01-30]
-      iex> Tox.Date.add(date, month: 1, day: 1)
+      iex> Tox.Date.shift(date, month: 1, day: 1)
       ~D[2000-03-01]
-      iex> date |> Tox.Date.add(month: 1) |> Tox.Date.add(day: 1)
+      iex> date |> Tox.Date.shift(month: 1) |> Tox.Date.shift(day: 1)
       ~D[2000-03-01]
-      iex> date |> Tox.Date.add(day: 1) |> Tox.Date.add(month: 1)
+      iex> date |> Tox.Date.shift(day: 1) |> Tox.Date.shift(month: 1)
       ~D[2000-02-29]
 
-  Using `add/2` with a different calendar.
+  Using `shift/2` with a different calendar.
 
       iex> ~D[2000-12-30]
       ...> |> Date.convert!(Cldr.Calendar.Coptic)
-      ...> |> Tox.Date.add(day: 3)
+      ...> |> Tox.Date.shift(day: 3)
       %Date{year: 1717, month: 4, day: 24, calendar: Cldr.Calendar.Coptic}
 
   """
-  @spec add(Calendar.date(), [Tox.duration()]) :: Date.t()
-  def add(date, durations) do
+  @spec shift(Calendar.date(), [Tox.duration()]) :: Date.t()
+  def shift(date, durations) do
     date
-    |> add_years(Keyword.get(durations, :year, 0))
-    |> add_months(Keyword.get(durations, :month, 0))
+    |> shift_years(Keyword.get(durations, :year, 0))
+    |> shift_months(Keyword.get(durations, :month, 0))
     |> Date.add(
       Keyword.get(durations, :day, 0) + Keyword.get(durations, :week, 0) * Tox.days_per_week()
     )
@@ -306,7 +307,7 @@ defmodule Tox.Date do
   @spec beginning_of_week(Calendar.date()) :: Calendar.date()
   def beginning_of_week(%{calendar: calendar, year: year, month: month, day: day} = date) do
     day = calendar.day_of_week(year, month, day) - 1
-    add(date, day: -1 * day)
+    shift(date, day: -1 * day)
   end
 
   @doc """
@@ -341,7 +342,7 @@ defmodule Tox.Date do
 
       iex> ~D[2020-12-31]
       ...> |> Date.convert!(Cldr.Calendar.Coptic)
-      ...> |> Tox.Date.add(day: 1)
+      ...> |> Tox.Date.shift(day: 1)
       ...> |> Tox.Date.end_of_month()
       %Date{year: 1737, month: 4, day: 30, calendar: Cldr.Calendar.Coptic}
 
@@ -369,14 +370,14 @@ defmodule Tox.Date do
   @spec end_of_week(Calendar.date()) :: Calendar.date()
   def end_of_week(%{calendar: calendar, year: year, month: month, day: day} = date) do
     day = Tox.days_per_week() - calendar.day_of_week(year, month, day)
-    add(date, day: day)
+    shift(date, day: day)
   end
 
   ## Helpers
 
-  defp add_years(date, 0), do: date
+  defp shift_years(date, 0), do: date
 
-  defp add_years(
+  defp shift_years(
          %{calendar: calendar, year: year, month: month, day: day} = date,
          years
        ) do
@@ -386,19 +387,19 @@ defmodule Tox.Date do
     %{date | year: updated_year, day: updated_day}
   end
 
-  defp add_months(date, 0), do: date
+  defp shift_months(date, 0), do: date
 
-  defp add_months(
+  defp shift_months(
          %{calendar: calendar, month: month, year: year, day: day} = date,
          months
        ) do
-    {updated_year, updated_month} = add_months(months, year, month, calendar)
+    {updated_year, updated_month} = shift_months(months, year, month, calendar)
     updated_day = update_day(updated_year, updated_month, day, calendar)
 
     %{date | year: updated_year, month: updated_month, day: updated_day}
   end
 
-  defp add_months(months, year, month, calendar) do
+  defp shift_months(months, year, month, calendar) do
     months_per_year = calendar.months_in_year(year)
 
     updated_year = year + div(months, months_per_year)

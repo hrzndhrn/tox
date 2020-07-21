@@ -28,7 +28,7 @@ defmodule Tox.Interval do
       #Tox.Interval<[2020-04-10T00:00:00-05:00/P1D[>
       iex> Tox.Interval.contains?(interval, datetime)
       true
-      iex> Tox.Interval.contains?(interval, Tox.DateTime.add(datetime, day: 1))
+      iex> Tox.Interval.contains?(interval, Tox.DateTime.shift(datetime, day: 1))
       false
 
   With `boundaries` set to `:open`:
@@ -41,7 +41,7 @@ defmodule Tox.Interval do
       #Tox.Interval<]2020-04-10T00:00:00-05:00/P1D[>
       iex> Tox.Interval.contains?(interval, datetime)
       false
-      iex> Tox.Interval.contains?(interval, Tox.DateTime.add(datetime, day: 1))
+      iex> Tox.Interval.contains?(interval, Tox.DateTime.shift(datetime, day: 1))
       false
 
   With `boundaries` set to `:left_open`:
@@ -54,7 +54,7 @@ defmodule Tox.Interval do
       #Tox.Interval<]2020-04-10T00:00:00-05:00/P1D]>
       iex> Tox.Interval.contains?(interval, datetime)
       false
-      iex> Tox.Interval.contains?(interval, Tox.DateTime.add(datetime, day: 1))
+      iex> Tox.Interval.contains?(interval, Tox.DateTime.shift(datetime, day: 1))
       true
 
   With `boundaries` set to `:closed`:
@@ -67,7 +67,7 @@ defmodule Tox.Interval do
       #Tox.Interval<[2020-04-10T00:00:00-05:00/P1D]>
       iex> Tox.Interval.contains?(interval, datetime)
       true
-      iex> Tox.Interval.contains?(interval, Tox.DateTime.add(datetime, day: 1))
+      iex> Tox.Interval.contains?(interval, Tox.DateTime.shift(datetime, day: 1))
       true
 
   """
@@ -170,7 +170,7 @@ defmodule Tox.Interval do
   defp ending_datetime(_start, %DateTime{} = ending), do: ending
 
   defp ending_datetime(%DateTime{} = start, %Period{} = ending) do
-    Tox.DateTime.add(start, Period.to_durations(ending))
+    Tox.DateTime.shift(start, Period.to_durations(ending))
   end
 
   @doc """
@@ -201,7 +201,7 @@ defmodule Tox.Interval do
   defp start_datetime(%DateTime{} = start, _ending), do: start
 
   defp start_datetime(%Period{} = start, %DateTime{} = ending) do
-    Tox.DateTime.add(ending, Period.to_durations(start, :neg))
+    Tox.DateTime.shift(ending, Period.to_durations(start, :neg))
   end
 
   @doc """
@@ -240,11 +240,11 @@ defmodule Tox.Interval do
   end
 
   defp next(%DateTime{} = start, %Period{} = ending) do
-    {Tox.DateTime.add(start, Period.to_durations(ending)), ending}
+    {Tox.DateTime.shift(start, Period.to_durations(ending)), ending}
   end
 
   defp next(%Period{} = start, %DateTime{} = ending) do
-    {start, Tox.DateTime.add(ending, Period.to_durations(start))}
+    {start, Tox.DateTime.shift(ending, Period.to_durations(start))}
   end
 
   defp next(%DateTime{} = start, %DateTime{} = ending) do
@@ -290,12 +290,12 @@ defmodule Tox.Interval do
       iex> now = DateTime.utc_now()
       iex> interval =
       ...>   Tox.Interval.new!(
-      ...>     Tox.DateTime.add(now, hour: -1),
+      ...>     Tox.DateTime.shift(now, hour: -1),
       ...>     Tox.Period.new!(hour: 2, minute: 10)
       ...>   )
       iex> Tox.Interval.since_start(interval, now)
       {:ok, 3600}
-      iex> Tox.Interval.since_start(interval, Tox.DateTime.add(now, hour: 10))
+      iex> Tox.Interval.since_start(interval, Tox.DateTime.shift(now, hour: 10))
       :error
 
   """
@@ -319,12 +319,12 @@ defmodule Tox.Interval do
       iex> now = DateTime.utc_now()
       iex> interval =
       ...>   Tox.Interval.new!(
-      ...>     Tox.DateTime.add(now, hour: -1),
+      ...>     Tox.DateTime.shift(now, hour: -1),
       ...>     Tox.Period.new!(hour: 2, minute: 10)
       ...>   )
       iex> Tox.Interval.until_ending(interval, now)
       {:ok, 4200}
-      iex> Tox.Interval.until_ending(interval, Tox.DateTime.add(now, hour: 10))
+      iex> Tox.Interval.until_ending(interval, Tox.DateTime.shift(now, hour: 10))
       :error
 
   """

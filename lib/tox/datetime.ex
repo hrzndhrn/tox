@@ -12,82 +12,83 @@ defmodule Tox.DateTime do
   @utc "Etc/UTC"
 
   @doc """
-  Adds `durations` to the given `datetime`.
+  Shifts the `datetime` by the given `duration`.
+
 
   The `durations` is a keyword list of one or more durations of the type
   `Tox.duration` e.g. `[year: 1, day: 5, minute: 500]`. All values will be
-  added from the largest to the smallest unit.
+  shifted from the largest to the smallest unit.
 
   ## Examples
 
       iex> datetime = DateTime.from_naive!(~N[1980-11-01 00:00:00], "Europe/Oslo")
-      iex> Tox.DateTime.add(datetime, year: 2)
+      iex> Tox.DateTime.shift(datetime, year: 2)
       #DateTime<1982-11-01 00:00:00+01:00 CET Europe/Oslo>
-      iex> Tox.DateTime.add(datetime, year: -2, month: 1, hour: 48)
+      iex> Tox.DateTime.shift(datetime, year: -2, month: 1, hour: 48)
       #DateTime<1978-12-03 00:00:00+01:00 CET Europe/Oslo>
-      iex> Tox.DateTime.add(datetime, hour: 10, minute: 10, second: 10)
+      iex> Tox.DateTime.shift(datetime, hour: 10, minute: 10, second: 10)
       #DateTime<1980-11-01 10:10:10+01:00 CET Europe/Oslo>
 
   Adding a month at the end of the month can update the day too.
 
       iex> datetime = DateTime.from_naive!(~N[2000-01-31 00:00:00], "Europe/Oslo")
-      iex> Tox.DateTime.add(datetime, month: 1)
+      iex> Tox.DateTime.shift(datetime, month: 1)
       #DateTime<2000-02-29 00:00:00+01:00 CET Europe/Oslo>
 
-  For that reason it is important to know that all values will be added from the
+  For that reason it is important to know that all values will be shifted from the
   largest to the smallest unit.
 
       iex> datetime = DateTime.from_naive!(~N[2000-01-30 00:00:00], "Europe/Oslo")
-      iex> Tox.DateTime.add(datetime, month: 1, day: 1)
+      iex> Tox.DateTime.shift(datetime, month: 1, day: 1)
       #DateTime<2000-03-01 00:00:00+01:00 CET Europe/Oslo>
-      iex> datetime |> Tox.DateTime.add(month: 1) |> Tox.DateTime.add(day: 1)
+      iex> datetime |> Tox.DateTime.shift(month: 1) |> Tox.DateTime.shift(day: 1)
       #DateTime<2000-03-01 00:00:00+01:00 CET Europe/Oslo>
-      iex> datetime |> Tox.DateTime.add(day: 1) |> Tox.DateTime.add(month: 1)
+      iex> datetime |> Tox.DateTime.shift(day: 1) |> Tox.DateTime.shift(month: 1)
       #DateTime<2000-02-29 00:00:00+01:00 CET Europe/Oslo>
 
   Treatment of time gaps. Usually, a transition to a daily-saving-time causing a time gap. For
   example, in the time-zone Europe/Berlin, the clocks are advanced by one hour on the last Sunday
-  in March at 02:00. Therefore there is a gap between 02:00 and 03:00. The `add/3` function will
+  in March at 02:00. Therefore there is a gap between 02:00 and 03:00. The `shift/3` function will
   adjust this by adding or subtracting the difference from the calculated date.
 
       # adding a day
       iex> datetime = DateTime.from_naive!(~N[2020-03-28 02:30:00], "Europe/Berlin")
-      iex> result = Tox.DateTime.add(datetime, day: 1)
+      iex> result = Tox.DateTime.shift(datetime, day: 1)
       #DateTime<2020-03-29 03:30:00+02:00 CEST Europe/Berlin>
       iex> DateTime.diff(result, datetime) == 24 * 60 * 60
       true
-      iex> Tox.DateTime.add(result, day: -1)
+      iex> Tox.DateTime.shift(result, day: -1)
       #DateTime<2020-03-28 03:30:00+01:00 CET Europe/Berlin>
 
       # subtracting a day
       iex> datetime = DateTime.from_naive!(~N[2020-03-30 02:30:00], "Europe/Berlin")
-      iex> result = Tox.DateTime.add(datetime, day: -1)
+      iex> result = Tox.DateTime.shift(datetime, day: -1)
       #DateTime<2020-03-29 01:30:00+01:00 CET Europe/Berlin>
       iex> DateTime.diff(datetime, result) == 24 * 60 * 60
       true
-      iex> Tox.DateTime.add(result, day: 1)
+      iex> Tox.DateTime.shift(result, day: 1)
       #DateTime<2020-03-30 01:30:00+02:00 CEST Europe/Berlin>
 
   Treatment of ambiguous times. Usually, a transition from daily-saving-time causing an ambiguous
   period.  For example, in the time-zone Europe/Berlin, the clocks are set back one hour on the
   last Sunday in October. Therefore the period from 02:00 to 03:00 exists twice on this day. The
-  `add/3` function will adjust this by checking if the original datetime later or earlier.
+  `shift/3` function will adjust this by checking if the original datetime later or earlier.
 
       # adding a day
       iex> datetime = DateTime.from_naive!(~N[2020-10-24 02:30:00], "Europe/Berlin")
-      iex> result = Tox.DateTime.add(datetime, day: 1)
+      iex> result = Tox.DateTime.shift(datetime, day: 1)
       #DateTime<2020-10-25 02:30:00+02:00 CEST Europe/Berlin>
       iex> DateTime.diff(result, datetime) == 24 * 60 * 60
       true
 
       # subtracting a day
       iex> datetime = DateTime.from_naive!(~N[2020-10-26 02:30:00], "Europe/Berlin")
-      iex> result = Tox.DateTime.add(datetime, day: -1)
+      iex> result = Tox.DateTime.shift(datetime, day: -1)
       #DateTime<2020-10-25 02:30:00+01:00 CET Europe/Berlin>
       iex> DateTime.diff(datetime, result) == 24 * 60 * 60
       true
 
-  Using `add/3` with a different calendar.
+  Using `shift/3` with a different calendar.
 
       iex> datetime =
       ...>   ~N[2020-10-26 02:30:00]
@@ -96,25 +97,26 @@ defmodule Tox.DateTime do
       ...>
       ...> to_string(datetime)
       "2013-02-16 02:30:00+03:00 EAT Africa/Nairobi"
-      iex> datetime |> Tox.DateTime.add(month: 13) |> to_string()
+      iex> datetime |> Tox.DateTime.shift(month: 13) |> to_string()
       "2014-02-16 02:30:00+03:00 EAT Africa/Nairobi"
 
   """
-  @spec add(Calendar.datetime(), [Tox.duration()], Calendar.time_zone_database()) :: DateTime.t()
-  def add(datetime, durations, time_zone_database \\ Calendar.get_time_zone_database())
+  @spec shift(Calendar.datetime(), [Tox.duration()], Calendar.time_zone_database()) ::
+          DateTime.t()
+  def shift(datetime, durations, time_zone_database \\ Calendar.get_time_zone_database())
 
-  def add(datetime, [], _time_zone_database), do: datetime
+  def shift(datetime, [], _time_zone_database), do: datetime
 
-  def add(%{time_zone: time_zone} = datetime, durations, time_zone_database) do
-    with {:ok, datetime} <- add_date(datetime, durations, time_zone_database),
+  def shift(%{time_zone: time_zone} = datetime, durations, time_zone_database) do
+    with {:ok, datetime} <- shift_date(datetime, durations, time_zone_database),
          {:ok, datetime} <- DateTime.shift_zone(datetime, @utc, time_zone_database),
-         {:ok, datetime} <- add_time(datetime, durations, time_zone_database),
+         {:ok, datetime} <- shift_time(datetime, durations, time_zone_database),
          {:ok, datetime} <- DateTime.shift_zone(datetime, time_zone, time_zone_database) do
       datetime
     else
       {:error, reason} ->
         raise ArgumentError,
-              "cannot add #{inspect(durations)} to #{inspect(datetime)}, " <>
+              "cannot shift #{inspect(durations)} to #{inspect(datetime)}, " <>
                 "reason: #{inspect(reason)}"
     end
   end
@@ -364,7 +366,7 @@ defmodule Tox.DateTime do
     day = calendar.day_of_week(year, month, day) - 1
 
     datetime
-    |> add(day: -1 * day)
+    |> shift(day: -1 * day)
     |> beginning_of_day(time_zone_database)
   end
 
@@ -566,7 +568,7 @@ defmodule Tox.DateTime do
     day = Tox.days_per_week() - calendar.day_of_week(year, month, day)
 
     datetime
-    |> add(day: day)
+    |> shift(day: day)
     |> end_of_day(time_zone_database)
   end
 
@@ -670,14 +672,14 @@ defmodule Tox.DateTime do
 
   ## Helpers
 
-  defp add_date(%{time_zone: time_zone} = datetime, durations, time_zone_database) do
+  defp shift_date(%{time_zone: time_zone} = datetime, durations, time_zone_database) do
     datetime
-    |> Tox.Date.add(durations)
+    |> Tox.Date.shift(durations)
     |> Tox.NaiveDateTime.from_date_time(datetime)
     |> adjust_datetime(datetime, time_zone, time_zone_database)
   end
 
-  defp add_time(
+  defp shift_time(
          %{calendar: calendar, microsecond: {_, precision}} = datetime,
          durations,
          time_zone_database

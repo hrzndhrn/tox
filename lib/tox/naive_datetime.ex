@@ -6,43 +6,44 @@ defmodule Tox.NaiveDateTime do
   alias Tox.IsoDays
 
   @doc """
-  Adds `durations` to the given `naive_datetime`.
+  Shifts the `naive_datetime` by the given `duration`.
+
 
   The `durations` is a keyword list of one or more durations of the type
   `Tox.duration` e.g. `[year: 1, day: 5, minute: 500]`. All values will be
-  added from the largest to the smallest unit.
+  shifted from the largest to the smallest unit.
 
   ## Examples
 
       iex> naive_datetime = ~N[2000-01-01 00:00:00]
-      iex> Tox.NaiveDateTime.add(naive_datetime, year: 2)
+      iex> Tox.NaiveDateTime.shift(naive_datetime, year: 2)
       ~N[2002-01-01 00:00:00]
-      iex> Tox.NaiveDateTime.add(naive_datetime, year: -2, month: 1, hour: 48)
+      iex> Tox.NaiveDateTime.shift(naive_datetime, year: -2, month: 1, hour: 48)
       ~N[1998-02-03 00:00:00]
-      iex> Tox.NaiveDateTime.add(naive_datetime, hour: 10, minute: 10, second: 10)
+      iex> Tox.NaiveDateTime.shift(naive_datetime, hour: 10, minute: 10, second: 10)
       ~N[2000-01-01 10:10:10]
 
   Adding a month at the end of the month can update the day too.
 
-      iex> Tox.NaiveDateTime.add(~N[2000-01-31 00:00:00], month: 1)
+      iex> Tox.NaiveDateTime.shift(~N[2000-01-31 00:00:00], month: 1)
       ~N[2000-02-29 00:00:00]
 
-  For that reason it is important to know that all values will be added from the
+  For that reason it is important to know that all values will be shifted from the
   largest to the smallest unit.
 
       iex> naive_datetime = DateTime.from_naive!(~N[2000-01-30 00:00:00], "Europe/Oslo")
-      iex> Tox.NaiveDateTime.add(naive_datetime, month: 1, day: 1)
+      iex> Tox.NaiveDateTime.shift(naive_datetime, month: 1, day: 1)
       ~N[2000-03-01 00:00:00+01:00]
-      iex> naive_datetime |> Tox.NaiveDateTime.add(month: 1) |> Tox.NaiveDateTime.add(day: 1)
+      iex> naive_datetime |> Tox.NaiveDateTime.shift(month: 1) |> Tox.NaiveDateTime.shift(day: 1)
       ~N[2000-03-01 00:00:00+01:00]
-      iex> naive_datetime |> Tox.NaiveDateTime.add(day: 1) |> Tox.NaiveDateTime.add(month: 1)
+      iex> naive_datetime |> Tox.NaiveDateTime.shift(day: 1) |> Tox.NaiveDateTime.shift(month: 1)
       ~N[2000-02-29 00:00:00+01:00]
 
-  Using `add/2` with a different calendar.
+  Using `shift/2` with a different calendar.
 
       iex> ~N[2012-09-03 02:30:00]
       ...> |> NaiveDateTime.convert!(Cldr.Calendar.Ethiopic)
-      ...> |> Tox.NaiveDateTime.add(day: 6)
+      ...> |> Tox.NaiveDateTime.shift(day: 6)
       %NaiveDateTime{
         calendar: Cldr.Calendar.Ethiopic,
         year: 2004,
@@ -55,10 +56,10 @@ defmodule Tox.NaiveDateTime do
       }
 
   """
-  @spec add(Calendar.naive_datetime(), [Tox.duration()]) :: NaiveDateTime.t()
-  def add(%{calendar: calendar, microsecond: {_, precision}} = naive_datetime, durations) do
+  @spec shift(Calendar.naive_datetime(), [Tox.duration()]) :: NaiveDateTime.t()
+  def shift(%{calendar: calendar, microsecond: {_, precision}} = naive_datetime, durations) do
     naive_datetime
-    |> Tox.Date.add(durations)
+    |> Tox.Date.shift(durations)
     |> from_date_time(naive_datetime)
     |> IsoDays.from_naive_datetime()
     |> IsoDays.add(IsoDays.from_durations_time(durations, calendar, precision))
@@ -260,7 +261,7 @@ defmodule Tox.NaiveDateTime do
     day = calendar.day_of_week(year, month, day) - 1
 
     naive_datetime
-    |> add(day: -1 * day)
+    |> shift(day: -1 * day)
     |> beginning_of_day()
   end
 
@@ -415,7 +416,7 @@ defmodule Tox.NaiveDateTime do
     day = Tox.days_per_week() - calendar.day_of_week(year, month, day)
 
     naive_datetime
-    |> add(day: day)
+    |> shift(day: day)
     |> end_of_day()
   end
 

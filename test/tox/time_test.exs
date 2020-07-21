@@ -4,10 +4,10 @@ defmodule Tox.TimeTest do
 
   doctest Tox.Time
 
-  property "add/2" do
+  property "shift/2" do
     check all time <- Generator.time(),
               durations <- Generator.durations() do
-      assert valid_time?(Tox.Time.add(time, durations))
+      assert valid_time?(Tox.Time.shift(time, durations))
     end
   end
 

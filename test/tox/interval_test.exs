@@ -39,7 +39,7 @@ defmodule Tox.IntervalTest do
 
       interval =
         Tox.Interval.new!(
-          Tox.DateTime.add(now, hour: -1),
+          Tox.DateTime.shift(now, hour: -1),
           Tox.Period.new!(hour: 2, minute: 10)
         )
 
@@ -51,7 +51,7 @@ defmodule Tox.IntervalTest do
 
       interval =
         Tox.Interval.new!(
-          Tox.DateTime.add(now, hour: -10),
+          Tox.DateTime.shift(now, hour: -10),
           Tox.Period.new!(hour: 2)
         )
 
@@ -65,7 +65,7 @@ defmodule Tox.IntervalTest do
 
       interval =
         Tox.Interval.new!(
-          Tox.DateTime.add(now, hour: -1),
+          Tox.DateTime.shift(now, hour: -1),
           Tox.Period.new!(hour: 2, minute: 10)
         )
 
@@ -78,7 +78,7 @@ defmodule Tox.IntervalTest do
 
       interval =
         Tox.Interval.new!(
-          Tox.DateTime.add(now, hour: -10),
+          Tox.DateTime.shift(now, hour: -10),
           Tox.Period.new!(hour: 2)
         )
 

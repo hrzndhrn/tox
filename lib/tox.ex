@@ -33,6 +33,16 @@ defmodule Tox do
   """
   @type boundaries :: :closed | :left_open | :right_open | :open
 
+  @doc """
+  Shift the `DateTime`, `NaiveDateTime`, `Date` or `Time` by the given duration.
+  """
+  @spec shift(date_or_time, [duration()]) :: date_or_time
+        when date_or_time: DateTime.t() | NaiveDateTime.t() | Date.t() | Time.t()
+  def shift(%DateTime{} = datetime, duration), do: Tox.DateTime.shift(datetime, duration)
+  def shift(%NaiveDateTime{} = naive, duration), do: Tox.NaiveDateTime.shift(naive, duration)
+  def shift(%Date{} = date, duration), do: Tox.Date.shift(date, duration)
+  def shift(%Time{} = time, duration), do: Tox.Time.shift(time, duration)
+
   @doc false
   @spec days_per_week :: integer()
   def days_per_week, do: 7

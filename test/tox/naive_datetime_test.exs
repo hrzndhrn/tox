@@ -4,95 +4,109 @@ defmodule Tox.NaiveDateTimeTest do
 
   doctest Tox.NaiveDateTime
 
-  describe "add/2" do
+  describe "shift/2" do
     test "adds a year" do
-      assert Tox.NaiveDateTime.add(~N[1999-01-15 10:11:12], year: 1) == ~N[2000-01-15 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[1999-01-15 10:11:12], year: 1) == ~N[2000-01-15 10:11:12]
     end
 
     test "subtracts a year" do
-      assert Tox.NaiveDateTime.add(~N[1999-01-15 10:11:12], year: -1) == ~N[1998-01-15 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[1999-01-15 10:11:12], year: -1) == ~N[1998-01-15 10:11:12]
     end
 
     test "adds a year and updates day" do
-      assert Tox.NaiveDateTime.add(~N[2000-02-29 10:11:12], year: 1) == ~N[2001-02-28 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-02-29 10:11:12], year: 1) == ~N[2001-02-28 10:11:12]
     end
 
     test "subtracts a year and updates day" do
-      assert Tox.NaiveDateTime.add(~N[2000-02-29 10:11:12], year: -1) == ~N[1999-02-28 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-02-29 10:11:12], year: -1) == ~N[1999-02-28 10:11:12]
     end
 
     test "adds a month" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-01 10:11:12], month: 1) == ~N[2000-02-01 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-01 10:11:12], month: 1) == ~N[2000-02-01 10:11:12]
     end
 
     test "subtracts a month" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-01 10:11:12], month: -1) == ~N[1999-12-01 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-01 10:11:12], month: -1) ==
+               ~N[1999-12-01 10:11:12]
     end
 
     test "adds a month and updates day" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: 1) == ~N[2000-02-29 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: 1) == ~N[2000-02-29 10:11:12]
     end
 
     test "subtracts a month and updates day" do
-      assert Tox.NaiveDateTime.add(~N[2000-03-31 10:11:12], month: -1) == ~N[2000-02-29 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-03-31 10:11:12], month: -1) ==
+               ~N[2000-02-29 10:11:12]
     end
 
     test "adds multiple months" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: 2) == ~N[2000-03-31 10:11:12]
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: 11) == ~N[2000-12-31 10:11:12]
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: 12) == ~N[2001-01-31 10:11:12]
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: 13) == ~N[2001-02-28 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: 2) == ~N[2000-03-31 10:11:12]
+
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: 11) ==
+               ~N[2000-12-31 10:11:12]
+
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: 12) ==
+               ~N[2001-01-31 10:11:12]
+
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: 13) ==
+               ~N[2001-02-28 10:11:12]
     end
 
     test "subtracts multiple months" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: -2) == ~N[1999-11-30 10:11:12]
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: -11) == ~N[1999-02-28 10:11:12]
-      assert Tox.NaiveDateTime.add(~N[2000-01-31 10:11:12], month: -12) == ~N[1999-01-31 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: -2) ==
+               ~N[1999-11-30 10:11:12]
+
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: -11) ==
+               ~N[1999-02-28 10:11:12]
+
+      assert Tox.NaiveDateTime.shift(~N[2000-01-31 10:11:12], month: -12) ==
+               ~N[1999-01-31 10:11:12]
     end
 
     test "adds a day" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-01 10:11:12], day: 1) == ~N[2000-01-02 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-01 10:11:12], day: 1) == ~N[2000-01-02 10:11:12]
     end
 
     test "subtracts a day" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-10 10:11:12], day: -1) == ~N[2000-01-09 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-10 10:11:12], day: -1) == ~N[2000-01-09 10:11:12]
     end
 
     test "adds multiple days and updates month and year" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-01 10:11:12], day: 450) == ~N[2001-03-26 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2000-01-01 10:11:12], day: 450) == ~N[2001-03-26 10:11:12]
     end
 
     test "subtracts multiple days and updates month and year" do
-      assert Tox.NaiveDateTime.add(~N[2001-03-26 10:11:12], day: -450) == ~N[2000-01-01 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2001-03-26 10:11:12], day: -450) ==
+               ~N[2000-01-01 10:11:12]
     end
 
     test "adds years, months, and days" do
-      assert Tox.NaiveDateTime.add(~N[2000-01-01 10:11:12], year: 2, month: 3, day: 4) ==
+      assert Tox.NaiveDateTime.shift(~N[2000-01-01 10:11:12], year: 2, month: 3, day: 4) ==
                ~N[2002-04-05 10:11:12]
     end
 
     test "adds a week" do
-      assert Tox.NaiveDateTime.add(~N[2020-01-30 10:11:12], week: 1) == ~N[2020-02-06 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2020-01-30 10:11:12], week: 1) == ~N[2020-02-06 10:11:12]
     end
 
     test "subtracts a week" do
-      assert Tox.NaiveDateTime.add(~N[2020-02-06 10:11:12], week: -1) == ~N[2020-01-30 10:11:12]
+      assert Tox.NaiveDateTime.shift(~N[2020-02-06 10:11:12], week: -1) == ~N[2020-01-30 10:11:12]
     end
 
     test "adds from the largest to the smallest unit" do
       date = ~N[2001-02-28 10:11:12]
 
-      assert Tox.NaiveDateTime.add(date, month: 1, day: 1) == ~N[2001-03-29 10:11:12]
+      assert Tox.NaiveDateTime.shift(date, month: 1, day: 1) == ~N[2001-03-29 10:11:12]
 
-      assert Tox.NaiveDateTime.add(date, month: 1, day: 1) ==
-               date |> Tox.NaiveDateTime.add(month: 1) |> Tox.NaiveDateTime.add(day: 1)
+      assert Tox.NaiveDateTime.shift(date, month: 1, day: 1) ==
+               date |> Tox.NaiveDateTime.shift(month: 1) |> Tox.NaiveDateTime.shift(day: 1)
 
-      assert date |> Tox.NaiveDateTime.add(month: 1) |> Tox.NaiveDateTime.add(day: 1) !=
-               date |> Tox.NaiveDateTime.add(day: 1) |> Tox.NaiveDateTime.add(month: 1)
+      assert date |> Tox.NaiveDateTime.shift(month: 1) |> Tox.NaiveDateTime.shift(day: 1) !=
+               date |> Tox.NaiveDateTime.shift(day: 1) |> Tox.NaiveDateTime.shift(month: 1)
     end
 
     test "adds time" do
-      assert Tox.NaiveDateTime.add(
+      assert Tox.NaiveDateTime.shift(
                ~N[2000-01-31 23:00:00.000001],
                hour: 5,
                minute: 15,
@@ -103,7 +117,7 @@ defmodule Tox.NaiveDateTimeTest do
     end
 
     test "subtracts time" do
-      assert Tox.NaiveDateTime.add(
+      assert Tox.NaiveDateTime.shift(
                ~N[2000-02-01 04:15:10.050501],
                hour: -5,
                minute: -15,
@@ -114,7 +128,7 @@ defmodule Tox.NaiveDateTimeTest do
     end
 
     test "adds large amount of time" do
-      assert Tox.NaiveDateTime.add(
+      assert Tox.NaiveDateTime.shift(
                ~N[2000-01-31 23:00:00.000001],
                hour: 24 * 3 + 5,
                minute: 75,
@@ -125,7 +139,7 @@ defmodule Tox.NaiveDateTimeTest do
     end
 
     test "subtracts large amount of time" do
-      assert Tox.NaiveDateTime.add(
+      assert Tox.NaiveDateTime.shift(
                ~N[2000-02-04 05:18:21.050001],
                hour: -24 * 3 - 5,
                minute: -75,
@@ -172,10 +186,10 @@ defmodule Tox.NaiveDateTimeTest do
     end
   end
 
-  property "add/2" do
+  property "shift/2" do
     check all naive_datetime <- Generator.naive_datetime(),
               durations <- Generator.durations() do
-      assert valid_naive_datetime?(Tox.NaiveDateTime.add(naive_datetime, durations))
+      assert valid_naive_datetime?(Tox.NaiveDateTime.shift(naive_datetime, durations))
     end
   end
 

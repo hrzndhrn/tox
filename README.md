@@ -53,39 +53,39 @@ Some examples how to use `Tox`.  For more information and examples, see
 before and after:
 ```elixir
 iex> datetime = DateTime.from_naive!(~N[2020-03-10 12:00:00], "Europe/Berlin")
-iex> Tox.DateTime.before?(datetime, Tox.DateTime.add(datetime, day: 1))
+iex> Tox.DateTime.before?(datetime, Tox.DateTime.shift(datetime, day: 1))
 true
 iex> Tox.DateTime.before_or_equal?(datetime, datetime)
 true
-iex> Tox.DateTime.after?(datetime, Tox.DateTime.add(datetime, day: 1))
+iex> Tox.DateTime.after?(datetime, Tox.DateTime.shift(datetime, day: 1))
 false
 ```
 
-add and subtract:
+shifting back and forward:
 ```elixir
 iex> datetime = DateTime.from_naive!(~N[2020-01-01 12:00:00], "Europe/Oslo")
-iex> Tox.DateTime.add(datetime, year: 2, month: -3, day: 2, hour: -24, minute: 10)
+iex> Tox.DateTime.shift(datetime, year: 2, month: -3, day: 2, hour: -24, minute: 10)
 #DateTime<2021-10-02 12:10:00+02:00 CEST Europe/Oslo>
 
 iex> naive_datetime = ~N[2020-01-01 12:00:00]
-iex> Tox.NaiveDateTime.add(naive_datetime, year: 2, month: -3, day: 2, hour: -24, minute: 10)
+iex> Tox.NaiveDateTime.shift(naive_datetime, year: 2, month: -3, day: 2, hour: -24, minute: 10)
 ~N[2021-10-02 12:10:00+02:00]
 
-iex> Tox.Date.add(~D[2020-01-01], year: 2, month: -3, day: 2)
+iex> Tox.Date.shift(~D[2020-01-01], year: 2, month: -3, day: 2)
 ~D[2021-10-03]
 
-iex> Tox.Time.add(~T[00:00:00], hour: 2, minute: -10, microsecond: 99)
+iex> Tox.Time.shift(~T[00:00:00], hour: 2, minute: -10, microsecond: 99)
 ~T[01:50:00.000099]
 
 iex> {:ambiguous, datetime1, datetime2} =
 ...>   DateTime.from_naive(~N[2020-10-25 02:30:00], "Europe/Oslo")
-iex> Tox.DateTime.add(datetime1, hour: 1) == datetime2
+iex> Tox.DateTime.shift(datetime1, hour: 1) == datetime2
 true
 
 # falling into a gap
 iex> datetime = DateTime.from_naive!(~N[2020-03-29 01:30:00], "Europe/Paris")
 #DateTime<2020-03-29 01:30:00+01:00 CET Europe/Paris>
-iex> Tox.DateTime.add(datetime, minute: 40)
+iex> Tox.DateTime.shift(datetime, minute: 40)
 #DateTime<2020-03-29 03:10:00+02:00 CEST Europe/Paris>
 ```
 
@@ -102,7 +102,7 @@ iex> Tox.Interval.since_start(interval, now, :millisecond)
 {:ok, 1028023000}
 iex> Tox.Interval.until_ending(interval, now, :millisecond)
 {:ok, 1650377000}
-iex> Tox.Interval.until_ending(interval, Tox.DateTime.add(now, month: 1), :millisecond)
+iex> Tox.Interval.until_ending(interval, Tox.DateTime.shift(now, month: 1), :millisecond)
 :error
 ```
 

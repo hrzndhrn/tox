@@ -14,26 +14,26 @@ defmodule Tox.Time do
   ## Examples
 
       iex> time = ~T[12:00:00]
-      iex> Tox.Time.add(time, hour: 2)
+      iex> Tox.Time.shift(time, hour: 2)
       ~T[14:00:00.000000]
-      iex> Tox.Time.add(time, hour: -2, minute: 10, second: 48)
+      iex> Tox.Time.shift(time, hour: -2, minute: 10, second: 48)
       ~T[10:10:48.000000]
-      iex> Tox.Time.add(time, day: 2)
+      iex> Tox.Time.shift(time, day: 2)
       ~T[12:00:00.000000]
-      iex> Tox.Time.add(time, minute: 90)
+      iex> Tox.Time.shift(time, minute: 90)
       ~T[13:30:00.000000]
-      iex> Tox.Time.add(time, minute: -90)
+      iex> Tox.Time.shift(time, minute: -90)
       ~T[10:30:00.000000]
-      iex> Tox.Time.add(time, minute: -59, hour: -23)
+      iex> Tox.Time.shift(time, minute: -59, hour: -23)
       ~T[12:01:00.000000]
-      iex> Tox.Time.add(time, minute: -24 * 60)
+      iex> Tox.Time.shift(time, minute: -24 * 60)
       ~T[12:00:00.000000]
-      iex> Tox.Time.add(time, second: 24 * 60 * 60)
+      iex> Tox.Time.shift(time, second: 24 * 60 * 60)
       ~T[12:00:00.000000]
 
   """
-  @spec add(Calendar.time(), [Tox.duration()]) :: Time.t()
-  def add(
+  @spec shift(Calendar.time(), [Tox.duration()]) :: Time.t()
+  def shift(
         %{
           calendar: calendar,
           hour: hour,
