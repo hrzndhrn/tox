@@ -27,7 +27,7 @@ mix.exs. Fox time zone support you can install `time_zone_info`, `tz`, or
 ```elixir
 def deps do
   [
-    {:tox, "~> 0.1"}
+    {:tox, "~> 0.2"}
     # add one of the following packages for time zone support
     # {:time_zone_info, "~> 0.5"}
     # {:tz, "~> 0.10"}
