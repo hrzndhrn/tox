@@ -258,7 +258,7 @@ defmodule Tox.NaiveDateTime do
   def beginning_of_week(
         %{calendar: calendar, year: year, month: month, day: day} = naive_datetime
       ) do
-    day = calendar.day_of_week(year, month, day) - 1
+    day = Tox.day_of_week(calendar, year, month, day) - 1
 
     naive_datetime
     |> shift(day: -1 * day)
@@ -413,7 +413,7 @@ defmodule Tox.NaiveDateTime do
   """
   @spec end_of_week(Calendar.naive_datetime()) :: NaiveDateTime.t()
   def end_of_week(%{calendar: calendar, year: year, month: month, day: day} = naive_datetime) do
-    day = Tox.days_per_week() - calendar.day_of_week(year, month, day)
+    day = Tox.days_per_week() - Tox.day_of_week(calendar, year, month, day)
 
     naive_datetime
     |> shift(day: day)

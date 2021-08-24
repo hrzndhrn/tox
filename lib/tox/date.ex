@@ -306,7 +306,7 @@ defmodule Tox.Date do
   """
   @spec beginning_of_week(Calendar.date()) :: Calendar.date()
   def beginning_of_week(%{calendar: calendar, year: year, month: month, day: day} = date) do
-    day = calendar.day_of_week(year, month, day) - 1
+    day = Tox.day_of_week(calendar, year, month, day) - 1
     shift(date, day: -1 * day)
   end
 
@@ -369,7 +369,7 @@ defmodule Tox.Date do
   """
   @spec end_of_week(Calendar.date()) :: Calendar.date()
   def end_of_week(%{calendar: calendar, year: year, month: month, day: day} = date) do
-    day = Tox.days_per_week() - calendar.day_of_week(year, month, day)
+    day = Tox.days_per_week() - Tox.day_of_week(calendar, year, month, day)
     shift(date, day: day)
   end
 

@@ -52,4 +52,19 @@ defmodule Tox do
   def week(%{calendar: Calendar.ISO, year: year, month: month, day: day}) do
     :calendar.iso_week_number({year, month, day})
   end
+
+  if function_exported?(Date, :day_of_week, 2) do
+    @doc false
+    def day_of_week(calendar, year, month, day) do
+      {day, _epoch_day_of_week, _last_day_of_week} =
+        calendar.day_of_week(year, month, day, :default)
+
+      day
+    end
+  else
+    @doc false
+    def day_of_week(calendar, year, month, day) do
+      calendar.day_of_week(year, month, day)
+    end
+  end
 end

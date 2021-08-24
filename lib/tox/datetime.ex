@@ -363,7 +363,7 @@ defmodule Tox.DateTime do
         %{calendar: calendar, year: year, month: month, day: day} = datetime,
         time_zone_database \\ Calendar.get_time_zone_database()
       ) do
-    day = calendar.day_of_week(year, month, day) - 1
+    day = Tox.day_of_week(calendar, year, month, day) - 1
 
     datetime
     |> shift(day: -1 * day)
@@ -565,7 +565,7 @@ defmodule Tox.DateTime do
         %{calendar: calendar, year: year, month: month, day: day} = datetime,
         time_zone_database \\ Calendar.get_time_zone_database()
       ) do
-    day = Tox.days_per_week() - calendar.day_of_week(year, month, day)
+    day = Tox.days_per_week() - Tox.day_of_week(calendar, year, month, day)
 
     datetime
     |> shift(day: day)
@@ -594,7 +594,7 @@ defmodule Tox.DateTime do
       iex> datetime = DateTime.from_naive!(~N[1931-12-30 12:00:00], "Africa/Accra")
       #DateTime<1931-12-30 12:00:00+00:20 +0020 Africa/Accra>
       iex> Tox.DateTime.end_of_day(datetime)
-      #DateTime<1931-12-30 23:59:59.999999+00:00 GMT Africa/Accra>
+      #DateTime<1931-12-30 23:59:59.999999+00:20 +0020 Africa/Accra>
 
   """
   @spec end_of_day(Calendar.datetime(), Calendar.time_zone_database()) :: DateTime.t()

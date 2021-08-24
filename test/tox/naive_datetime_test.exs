@@ -239,7 +239,7 @@ defmodule Tox.NaiveDateTimeTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-      assert calendar.day_of_week(result.year, result.month, result.day) == 1
+      assert Tox.day_of_week(calendar, result.year, result.month, result.day) == 1
       assert result.hour == 0
       assert result.minute == 0
       assert result.second == 0
@@ -308,7 +308,7 @@ defmodule Tox.NaiveDateTimeTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-      assert calendar.day_of_week(result.year, result.month, result.day) == 7
+      assert Tox.day_of_week(calendar, result.year, result.month, result.day) == 7
       assert result.hour == 23
       assert result.minute == 59
       assert result.second == 59

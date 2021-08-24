@@ -475,7 +475,7 @@ defmodule Tox.DateTimeTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-      assert calendar.day_of_week(result.year, result.month, result.day) == 1
+      assert Tox.day_of_week(calendar, result.year, result.month, result.day) == 1
       assert DateTime.compare(result, datetime) in [:lt, :eq]
     end
   end
@@ -528,7 +528,7 @@ defmodule Tox.DateTimeTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-      assert calendar.day_of_week(result.year, result.month, result.day) == 7
+      assert Tox.day_of_week(calendar, result.year, result.month, result.day) == 7
       assert DateTime.compare(result, datetime) in [:gt, :eq]
     end
   end
