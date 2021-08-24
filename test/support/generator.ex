@@ -69,11 +69,11 @@ defmodule Generator do
 
   defp durations(count, units, durations) do
     {unit, units} = pop(units)
-    duration = {unit, :random.uniform(400) - 200}
+    duration = {unit, :rand.uniform(400) - 200}
     durations(count - 1, units, [duration | durations])
   end
 
-  defp pop(list), do: List.pop_at(list, :random.uniform(length(list)) - 1)
+  defp pop(list), do: List.pop_at(list, :rand.uniform(length(list)) - 1)
 
   defp to_datetime(naive_datetime) do
     case DateTime.from_naive(naive_datetime, Enum.random(TimeZoneInfo.time_zones())) do
