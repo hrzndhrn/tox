@@ -55,7 +55,7 @@ defmodule Tox do
 
   if function_exported?(Date, :day_of_week, 2) do
     @doc false
-    @spec day_of_week(Calendar.t(), integer(), non_neg_integer, non_neg_integer) :: 1..7
+    @spec day_of_week(Calendar.calendar(), integer(), non_neg_integer, non_neg_integer) :: 1..7
     def day_of_week(calendar, year, month, day) do
       {day, _epoch_day_of_week, _last_day_of_week} =
         calendar.day_of_week(year, month, day, :default)
@@ -64,7 +64,7 @@ defmodule Tox do
     end
   else
     @doc false
-    @spec day_of_week(Calendar.t(), integer(), non_neg_integer, non_neg_integer) :: 1..7
+    @spec day_of_week(Calendar.calendar(), integer(), non_neg_integer, non_neg_integer) :: 1..7
     def day_of_week(calendar, year, month, day) do
       calendar.day_of_week(year, month, day)
     end
