@@ -16,7 +16,7 @@ jobs:
           - '1.9.4'
           - '1.10.4'
           - '1.11.4'
-          - '1.12.2'
+          - '1.12.3'
         otp:
           - '20.3'
           - '21.3'
@@ -46,7 +46,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Elixir
-        uses: erlef/setup-elixir@v1
+        uses: erlef/setup-beam@v1
         with:
           elixir-version: ${{ matrix.elixir }}
           otp-version: ${{ matrix.otp }}
