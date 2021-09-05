@@ -460,7 +460,7 @@ defmodule Tox.NaiveDateTime do
       {2020, 1}
 
       iex> ~N[2020-06-04 11:12:13]
-      ...> |> NaiveDateTime.convert(Cldr.Calendar.Persian)
+      ...> |> NaiveDateTime.convert(Cldr.Calendar.Coptic)
       ...> |> Tox.NaiveDateTime.week()
       ** (FunctionClauseError) no function clause matching in Tox.NaiveDateTime.week/1
 

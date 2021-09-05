@@ -5,8 +5,7 @@ defmodule Generator do
   @calendars [
     Calendar.ISO,
     Cldr.Calendar.Coptic,
-    Cldr.Calendar.Ethiopic,
-    Cldr.Calendar.Persian
+    Cldr.Calendar.Ethiopic
   ]
 
   def naive_datetime, do: StreamData.map(naive_datetime_iso(), &convert/1)

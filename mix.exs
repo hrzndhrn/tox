@@ -94,7 +94,6 @@ defmodule Tox.MixProject do
       {:excoveralls, "~> 0.13", only: :test, runtime: false},
       {:ex_cldr_calendars_coptic, "~> 0.4", only: [:dev, :test]},
       {:ex_cldr_calendars_ethiopic, "~> 0.4", only: [:dev, :test]},
-      {:ex_cldr_calendars_persian, "~> 0.3", only: [:dev, :test]},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:stream_data, "~> 0.5", only: [:dev, :test]},
       {:time_zone_info, "~> 0.5", only: [:test, :dev]}
