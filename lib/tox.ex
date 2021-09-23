@@ -54,6 +54,7 @@ defmodule Tox do
   end
 
   Code.ensure_loaded(Date)
+
   if function_exported?(Date, :beginning_of_week, 2) do
     @doc false
     @spec day_of_week(Calendar.calendar(), integer(), non_neg_integer, non_neg_integer) :: 1..7
