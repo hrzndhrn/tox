@@ -10,13 +10,13 @@ Some structs and functions to work with dates, times, periods, and intervals.
 [`Calendar.time_zone_database`](https://hexdocs.pm/elixir/Calendar.html#t:time_zone_database/0)
 and any [`Calendar`](https://hexdocs.pm/elixir/Calendar.html#content).
 
-The tests and examples are using the time zone database from [`TimeZoneInfo`](
-https://github.com/hrzndhrn/time_zone_info) and the calendars
+The tests and examples are using the time zone database from
+[`TimeZoneInfo`](https://github.com/hrzndhrn/time_zone_info)
+and the calendars
 [`Calendar.ISO`](https://hexdocs.pm/elixir/Calendar.ISO.html#content),
-[`Cldr.Calendar.Coptic`](https://github.com/elixir-cldr/cldr_calendars_coptic),
-[`Cldr.Calendar.Ethiopic`](https://github.com/elixir-cldr/cldr_calendars_ethiopic),
+[`Cldr.Calendar.Coptic`](https://github.com/elixir-cldr/cldr_calendars_coptic)
 and
-[`Cldr.Calendar.Persian`](https://github.com/elixir-cldr/cldr_calendars_persian).
+[`Cldr.Calendar.Ethiopic`](https://github.com/elixir-cldr/cldr_calendars_ethiopic).
 
 ## Installation
 

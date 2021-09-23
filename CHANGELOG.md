@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 - 2021/09/23
+
+- Corrections in the documentation.
+
 ## 0.2.1 - 2021/08/24
 
 - Changes to handle `Calendar.day_of_week/4`.

@@ -4,7 +4,7 @@ defmodule Tox.MixProject do
   def project do
     [
       app: :tox,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -97,8 +97,6 @@ defmodule Tox.MixProject do
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:stream_data, "~> 0.5", only: [:dev, :test]},
       {:time_zone_info, "~> 0.5", only: [:test, :dev]}
-      # {:tz, "~> 0.10", only: [:test, :dev]},
-      # {:tzdata, "~> 1.0", only: [:test, :dev]}
     ]
   end
 end

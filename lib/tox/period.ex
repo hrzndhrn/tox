@@ -2,10 +2,10 @@ defmodule Tox.Period do
   @moduledoc """
   A `Period` struct and functions.
 
-  The `Period` struct contains the fields `year`, `month`, `week`, `day`,
-  `hour`, `minute` and `second`. The values for the fields are representing the
-  amount of time for an unit. Expected `second`, all values are integers equals
-  or greater `0`. The filed `second` can also be a float equals or greate `0`.
+  The Period struct contains the fields `year`, `month`, `week`, `day`, `hour`,
+  `minute` and second. The values for the fields represent the amount of time
+  for a unit. Expected `second`, all values are integers equal or greater than
+  `0`. The field `second` can also be a float equals to or greater than `0`.
   """
 
   @microseconds_per_second 1_000_000
@@ -15,7 +15,7 @@ defmodule Tox.Period do
 
   @typedoc """
   An amount of time with a specified unit e.g. `{second: 5.500}` or `{hour: 1}`.
-  The amount of all durations must be equal or greater as 0.
+  The amount of all durations must be equal or greater as `0`.
   """
   @type duration ::
           {:year, non_neg_integer()}

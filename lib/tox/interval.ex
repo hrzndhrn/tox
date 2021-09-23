@@ -3,11 +3,11 @@ defmodule Tox.Interval do
   An `Interval` struct and functions.
 
   A time interval is the intervening time between two time points. The amount of
-  intervening time is expressed by a by a combination of `DateTime`/`DateTime`,
+  intervening time is expressed by a combination of `DateTime`/`DateTime`,
   `Datetime`/`Period` or `Period`/`DateTime`.
 
-  The key `boundaries` specifies if the `start` and `ending` belongs to the
-  interval.
+  The key `boundaries` indicates whether the `start` and the `ending` belong to
+  the interval.
 
   Valid values for `boundaries` are:
 
@@ -207,8 +207,6 @@ defmodule Tox.Interval do
   @doc """
   Returns the next interval.
 
-  The interval boundaries are not influence the returned datetime.
-
   ## Examples
 
       iex> interval = Tox.Interval.new!(
@@ -253,9 +251,10 @@ defmodule Tox.Interval do
   end
 
   @doc """
-  Returns the previous interval.
+  Returns true when the `datetime` is in the given `interval`.
 
-  The interval boundaries are not influence the returned datetime.
+  Whether the statrt and end belong to the interval is determined by the value
+  for `boundaries`. See the documentation at the top.
 
   ## Examples
 
@@ -269,12 +268,12 @@ defmodule Tox.Interval do
 
   """
   @spec contains?(t(), DateTime.t()) :: boolean()
-  def contains?(period, datetime) do
+  def contains?(interval, datetime) do
     Tox.DateTime.between?(
       datetime,
-      start_datetime(period),
-      ending_datetime(period),
-      period.boundaries
+      start_datetime(interval),
+      ending_datetime(interval),
+      interval.boundaries
     )
   end
 
