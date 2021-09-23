@@ -543,7 +543,7 @@ defmodule Tox.DateTimeTest do
       assert result.year == datetime.year
       assert result.month == datetime.month
 
-      unless datetime.time_zone == "Pacific/Enderbury" and
+      unless datetime.time_zone in ["Pacific/Enderbury", "Pacific/Kiritimati"] and
                datetime.year == 1994 and
                datetime.month == 12 do
         assert result.day == calendar.days_in_month(result.year, result.month)
