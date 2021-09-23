@@ -593,16 +593,7 @@ defmodule Tox.DateTime do
         new_datetime
 
       {:ambiguous, _, new_datetime} ->
-        %{
-          new_datetime
-          | year: year,
-            month: month,
-            day: day,
-            hour: hour,
-            minute: minute,
-            second: second,
-            microsecond: microsecond
-        }
+        new_datetime
 
       {:error, reason} ->
         raise ArgumentError,

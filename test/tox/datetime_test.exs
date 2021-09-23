@@ -284,8 +284,7 @@ defmodule Tox.DateTimeTest do
     end
 
     test "raises an error for an invalid map" do
-      message =
-        "cannot set 2020-11-111 to beginning of day, reason: :invalid_date"
+      message = "cannot set 2020-11-111 to beginning of day, reason: :invalid_date"
 
       assert_raise ArgumentError, message, fn ->
         Tox.DateTime.beginning_of_day(%{
@@ -365,6 +364,39 @@ defmodule Tox.DateTimeTest do
       assert_raise ArgumentError, ~r/cannot.set.*to.end.of.day.*utc_only/, fn ->
         Tox.DateTime.end_of_day(datetime, @utc_only)
       end
+    end
+
+    test "with an ambiguous datetime" do
+      # DateTime<1724-12-25 11:54:19.865412+01:00 +01 Africa/El_Aaiun Cldr.Calendar.Coptic>
+      datetime = %DateTime{
+        calendar: Calendar.ISO,
+        day: 31,
+        hour: 1,
+        microsecond: {107_611, 6},
+        minute: 21,
+        month: 12,
+        second: 53,
+        std_offset: 0,
+        time_zone: "Asia/Dacca",
+        utc_offset: 21600,
+        year: 2009,
+        zone_abbr: "+06"
+      }
+
+      assert Tox.DateTime.end_of_day(datetime) == %DateTime{
+               calendar: Calendar.ISO,
+               day: 31,
+               hour: 23,
+               microsecond: {999_999, 6},
+               minute: 59,
+               month: 12,
+               second: 59,
+               std_offset: 0,
+               time_zone: "Asia/Dacca",
+               utc_offset: 21600,
+               year: 2009,
+               zone_abbr: "+06"
+             }
     end
   end
 
