@@ -365,6 +365,7 @@ defmodule Tox.DateTime do
       ) do
     datetime
     |> Tox.Date.beginning_of_week()
+    |> IO.inspect()
     |> to_datetime(0, time_zone, calendar, time_zone_database)
   end
 
@@ -744,13 +745,16 @@ defmodule Tox.DateTime do
   defp to_datetime(year, month, day, precision, time_zone, calendar, time_zone_database) do
     with {:ok, naive_datetime} <-
            NaiveDateTime.new(year, month, day, 0, 0, 0, {0, precision}, calendar),
-         {:ok, datetime} <- DateTime.from_naive(naive_datetime, time_zone, time_zone_database) do
+         {:ok, datetime} <-
+           DateTime.from_naive(naive_datetime, time_zone, time_zone_database) |> IO.inspect() do
       datetime
     else
       {:gap, _, datetime} ->
         datetime
 
       {:ambiguous, datetime, _} ->
+        IO.inspect(datetime, label: :am)
+
         %{
           datetime
           | year: year,
