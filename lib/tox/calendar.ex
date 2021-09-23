@@ -23,7 +23,7 @@ defmodule Tox.Calendar do
               last_day_of_week :: non_neg_integer()
             }
     def day_of_week(%{calendar: calendar, year: year, month: month, day: day}) do
-      calendar.day_of_week(year, month, day)
+      {calendar.day_of_week(year, month, day), 1, 7}
     end
   end
 
