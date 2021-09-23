@@ -305,9 +305,8 @@ defmodule Tox.Date do
 
   """
   @spec beginning_of_week(Calendar.date()) :: Calendar.date()
-  def beginning_of_week(%{calendar: calendar, year: year, month: month, day: day} = date) do
-    day = Tox.day_of_week(calendar, year, month, day) - 1
-    shift(date, day: -1 * day)
+  def beginning_of_week(date) do
+    shift(date, day: Tox.Calendar.beginning_of_week(date))
   end
 
   @doc """

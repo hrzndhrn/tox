@@ -285,9 +285,7 @@ defmodule Tox.DateTimeTest do
 
     test "raises an error for an invalid map" do
       message =
-        "cannot set %{calendar: Calendar.ISO, day: 111, microsecond: {0, 0}, " <>
-          "month: 11, time_zone: \"Europe/Berlin\", year: 2020} to beginning " <>
-          "of day, reason: :invalid_date"
+        "cannot set 2020-11-111 to beginning of day, reason: :invalid_date"
 
       assert_raise ArgumentError, message, fn ->
         Tox.DateTime.beginning_of_day(%{
@@ -404,6 +402,13 @@ defmodule Tox.DateTimeTest do
         Tox.DateTime.end_of_month(datetime, @utc_only)
       end
     end
+
+    test "Pacific/Enderbury 1994" do
+      # Enderbury skiped the last day of the year in 1994.
+      datetime = DateTime.from_naive!(~N[1994-12-18 22:32:27], "Pacific/Enderbury")
+      end_of_month = DateTime.from_naive!(~N[1994-12-30 23:59:59.999999], "Pacific/Enderbury")
+      assert Tox.DateTime.end_of_month(datetime) == end_of_month
+    end
   end
 
   describe "end_of_year/2" do
@@ -475,7 +480,7 @@ defmodule Tox.DateTimeTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-      assert Tox.day_of_week(calendar, result.year, result.month, result.day) == 1
+      assert {day_of_week, day_of_week, _last_day_of_week} = Tox.Calendar.day_of_week(result)
       assert DateTime.compare(result, datetime) in [:lt, :eq]
     end
   end
@@ -505,7 +510,13 @@ defmodule Tox.DateTimeTest do
       assert %DateTime{} = result = Tox.DateTime.end_of_month(datetime)
       assert result.year == datetime.year
       assert result.month == datetime.month
-      assert result.day == calendar.days_in_month(result.year, result.month)
+
+      unless datetime.time_zone == "Pacific/Enderbury" and
+               datetime.year == 1994 and
+               datetime.month == 12 do
+        assert result.day == calendar.days_in_month(result.year, result.month)
+      end
+
       assert DateTime.compare(result, datetime) in [:gt, :eq]
     end
   end

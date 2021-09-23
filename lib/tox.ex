@@ -53,7 +53,8 @@ defmodule Tox do
     :calendar.iso_week_number({year, month, day})
   end
 
-  if function_exported?(Date, :day_of_week, 2) do
+  Code.ensure_loaded(Date)
+  if function_exported?(Date, :beginning_of_week, 2) do
     @doc false
     @spec day_of_week(Calendar.calendar(), integer(), non_neg_integer, non_neg_integer) :: 1..7
     def day_of_week(calendar, year, month, day) do

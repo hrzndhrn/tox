@@ -360,14 +360,12 @@ defmodule Tox.DateTime do
   """
   @spec beginning_of_week(Calendar.datetime(), Calendar.time_zone_database()) :: DateTime.t()
   def beginning_of_week(
-        %{calendar: calendar, year: year, month: month, day: day} = datetime,
+        %{calendar: calendar, time_zone: time_zone} = datetime,
         time_zone_database \\ Calendar.get_time_zone_database()
       ) do
-    day = Tox.day_of_week(calendar, year, month, day) - 1
-
     datetime
-    |> shift(day: -1 * day)
-    |> beginning_of_day(time_zone_database)
+    |> Tox.Date.beginning_of_week()
+    |> to_datetime(0, time_zone, calendar, time_zone_database)
   end
 
   @doc """
@@ -404,34 +402,10 @@ defmodule Tox.DateTime do
           month: month,
           day: day,
           microsecond: {_, precision}
-        } = datetime,
+        },
         time_zone_database \\ Calendar.get_time_zone_database()
       ) do
-    with {:ok, naive_datetime} <-
-           NaiveDateTime.new(year, month, day, 0, 0, 0, {0, precision}, calendar),
-         {:ok, datetime} <- DateTime.from_naive(naive_datetime, time_zone, time_zone_database) do
-      datetime
-    else
-      {:gap, _, datetime} ->
-        datetime
-
-      {:ambiguous, datetime, _} ->
-        %{
-          datetime
-          | year: year,
-            month: month,
-            day: day,
-            hour: 0,
-            minute: 0,
-            second: 0,
-            microsecond: {0, 0}
-        }
-
-      {:error, reason} ->
-        raise ArgumentError,
-              "cannot set #{inspect(datetime)} to beginning of day, " <>
-                "reason: #{inspect(reason)}"
-    end
+    to_datetime(year, month, day, precision, time_zone, calendar, time_zone_database)
   end
 
   @doc """
@@ -764,5 +738,43 @@ defmodule Tox.DateTime do
     iso_days
     |> Tox.NaiveDateTime.from_iso_days(calendar, precision)
     |> DateTime.from_naive(time_zone, time_zone_database)
+  end
+
+  defp to_datetime(
+         %{year: year, month: month, day: day},
+         precision,
+         time_zone,
+         calendar,
+         time_zone_database
+       ) do
+    to_datetime(year, month, day, precision, time_zone, calendar, time_zone_database)
+  end
+
+  defp to_datetime(year, month, day, precision, time_zone, calendar, time_zone_database) do
+    with {:ok, naive_datetime} <-
+           NaiveDateTime.new(year, month, day, 0, 0, 0, {0, precision}, calendar),
+         {:ok, datetime} <- DateTime.from_naive(naive_datetime, time_zone, time_zone_database) do
+      datetime
+    else
+      {:gap, _, datetime} ->
+        datetime
+
+      {:ambiguous, datetime, _} ->
+        %{
+          datetime
+          | year: year,
+            month: month,
+            day: day,
+            hour: 0,
+            minute: 0,
+            second: 0,
+            microsecond: {0, 0}
+        }
+
+      {:error, reason} ->
+        raise ArgumentError,
+              "cannot set #{year}-#{month}-#{day} to beginning of day, " <>
+                "reason: #{inspect(reason)}"
+    end
   end
 end

@@ -239,11 +239,11 @@ defmodule Tox.NaiveDateTimeTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-      assert Tox.day_of_week(calendar, result.year, result.month, result.day) == 1
       assert result.hour == 0
       assert result.minute == 0
       assert result.second == 0
       assert {0, _precision} = result.microsecond
+      assert {day_of_week, day_of_week, _last_day_of_week} = Tox.Calendar.day_of_week(result)
       assert NaiveDateTime.compare(result, naive_datetime) in [:lt, :eq]
     end
   end
