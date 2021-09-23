@@ -513,7 +513,7 @@ defmodule Tox.DateTimeTest do
       assert result.month in month_range
       assert result.day in day_range
 
-      unless datetime.time_zone = "Pacific/Kwajalei" and datetime.month == 12 do
+      unless datetime.time_zone == "Pacific/Kwajalei" and datetime.month == 12 do
         assert {day_of_week, day_of_week, _last_day_of_week} = Tox.Calendar.day_of_week(result)
       end
 
