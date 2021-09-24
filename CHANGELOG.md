@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.2 - 2021/09/23
+## 0.2.2 - 2021/09/24
 
 - Corrections in the documentation.
 - Fix `beginning_of_week` functions.
