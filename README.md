@@ -1,8 +1,8 @@
 # Tox
-[![Hex.pm](https://img.shields.io/hexpm/v/tox.svg)](https://hex.pm/packages/tox)
-![CI](https://github.com/hrzndhrn/tox/workflows/CI/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/hrzndhrn/tox/badge.svg?branch=master)](https://coveralls.io/github/hrzndhrn/tox?branch=master)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Hex.pm: version](https://img.shields.io/hexpm/v/tox.svg?style=flat-square)](https://hex.pm/packages/tox)
+[![GitHub: CI status](https://img.shields.io/github/workflow/status/hrzndhrn/tox/CI?style=flat-square)](https://github.com/hrzndhrn/tox/actions)
+[![Coveralls: coverage](https://img.shields.io/coveralls/github/hrzndhrn/tox?style=flat-square)](https://coveralls.io/github/hrzndhrn/tox)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/hrzndhrn/tox/blob/main/LICENSE.md)
 
 Some structs and functions to work with dates, times, periods, and intervals.
 
