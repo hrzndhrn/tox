@@ -1,8 +1,6 @@
 [
+  {"lib/tox/datetime.ex", :pattern_match, 584},
   {"lib/tox/datetime.ex", :pattern_match, 587},
-  {"lib/tox/datetime.ex", :pattern_match, 592},
-  {"lib/tox/datetime.ex", :pattern_match, 595},
-  {"lib/tox/datetime.ex", :pattern_match, 745},
-  {"lib/tox/datetime.ex", :pattern_match, 751},
-  {"lib/tox/datetime.ex", :pattern_match, 754}
+  {"lib/tox/datetime.ex", :pattern_match, 743},
+  {"lib/tox/datetime.ex", :pattern_match, 746}
 ]

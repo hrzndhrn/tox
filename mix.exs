@@ -4,7 +4,7 @@ defmodule Tox.MixProject do
   def project do
     [
       app: :tox,
-      version: "0.2.2",
+      version: "0.2.3",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -89,10 +89,11 @@ defmodule Tox.MixProject do
 
   defp deps do
     [
+      {:cldr_calendars_coptic, "~> 1.0.0-rc.0", only: [:dev, :test]},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
       {:excoveralls, "~> 0.13", only: :test, runtime: false},
-      {:ex_cldr_calendars_coptic, "~> 0.4", only: [:dev, :test]},
+      {:ex_cldr_calendars, "~> 1.17-rc", only: [:dev, :test], override: true},
       {:ex_cldr_calendars_ethiopic, "~> 0.4", only: [:dev, :test]},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:stream_data, "~> 0.5", only: [:dev, :test]},

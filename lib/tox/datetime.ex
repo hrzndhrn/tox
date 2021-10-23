@@ -562,14 +562,6 @@ defmodule Tox.DateTime do
       ...> |> DateTime.from_naive!("Africa/Algiers")
       ...> |> Tox.DateTime.end_of_day()
       #DateTime<1916-06-14 22:59:59.999999+00:00 WET Africa/Algiers>
-
-  On a day ending with an ambiguous period.
-
-      iex> datetime = DateTime.from_naive!(~N[1931-12-30 12:00:00], "Africa/Accra")
-      #DateTime<1931-12-30 12:00:00+00:20 +0020 Africa/Accra>
-      iex> Tox.DateTime.end_of_day(datetime)
-      #DateTime<1931-12-30 23:59:59.999999+00:20 +0020 Africa/Accra>
-
   """
   @spec end_of_day(Calendar.datetime(), Calendar.time_zone_database()) :: DateTime.t()
   def end_of_day(
