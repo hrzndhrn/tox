@@ -1,6 +1,6 @@
 # Tox
 [![Hex.pm: version](https://img.shields.io/hexpm/v/tox.svg?style=flat-square)](https://hex.pm/packages/tox)
-[![GitHub: CI status](https://img.shields.io/github/workflow/status/hrzndhrn/tox/CI?style=flat-square)](https://github.com/hrzndhrn/tox/actions)
+[![GitHub: CI status](https://img.shields.io/github/actions/workflow/status/hrzndhrn/tox/ci.yml?branch=main&style=flat-square)](https://github.com/hrzndhrn/tox/actions)
 [![Coveralls: coverage](https://img.shields.io/coveralls/github/hrzndhrn/tox?style=flat-square)](https://coveralls.io/github/hrzndhrn/tox)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/hrzndhrn/tox/blob/main/LICENSE.md)
 
