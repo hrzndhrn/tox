@@ -57,7 +57,10 @@ defmodule Tox.NaiveDateTime do
 
   """
   @spec shift(Calendar.naive_datetime(), [Tox.duration()]) :: NaiveDateTime.t()
-  def shift(%{calendar: calendar, microsecond: {_, precision}} = naive_datetime, durations) do
+  def shift(
+        %{calendar: calendar, microsecond: {_microsecond, precision}} = naive_datetime,
+        durations
+      ) do
     naive_datetime
     |> Tox.Date.shift(durations)
     |> from_date_time(naive_datetime)
@@ -277,7 +280,7 @@ defmodule Tox.NaiveDateTime do
           year: year,
           month: month,
           day: day,
-          microsecond: {_, precision}
+          microsecond: {_microsecond, precision}
         } = naive_datetime
       ) do
     case NaiveDateTime.new(year, month, day, 0, 0, 0, {0, precision}, calendar) do
@@ -348,14 +351,14 @@ defmodule Tox.NaiveDateTime do
       NaiveDateTime.compare(naive_datetime, to),
       boundaries
     } do
-      {:lt, _, _} -> false
-      {_, :gt, _} -> false
-      {:eq, _, :closed} -> true
-      {:eq, _, :right_open} -> true
-      {_, :eq, :closed} -> true
-      {_, :eq, :left_open} -> true
-      {:gt, :lt, _} -> true
-      {_, _, _} -> false
+      {:lt, _to, _boundaries} -> false
+      {_from, :gt, _boundaries} -> false
+      {:eq, _to, :closed} -> true
+      {:eq, _to, :right_open} -> true
+      {_from, :eq, :closed} -> true
+      {_from, :eq, :left_open} -> true
+      {:gt, :lt, _boundaries} -> true
+      {_from, _to, _boundaries} -> false
     end
   end
 
@@ -488,7 +491,7 @@ defmodule Tox.NaiveDateTime do
   @spec from_iso_days(Calendar.iso_days(), Calendar.calendar(), non_neg_integer) ::
           NaiveDateTime.t()
   def from_iso_days(iso_days, calendar, precision) do
-    {year, month, day, hour, minute, second, {microsecond, _}} =
+    {year, month, day, hour, minute, second, {microsecond, _precision}} =
       calendar.naive_datetime_from_iso_days(iso_days)
 
     %NaiveDateTime{

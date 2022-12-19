@@ -38,7 +38,7 @@ defmodule Tox.DateTimeTest do
     test "adds a year with a resulting ambiguous period (dst)" do
       datetime = DateTime.from_naive!(~N[2018-10-27 02:10:30.123], "Europe/Berlin")
 
-      {:ambiguous, expected, _} =
+      {:ambiguous, expected, _datetime} =
         DateTime.from_naive(~N[2019-10-27 02:10:30.123], "Europe/Berlin")
 
       assert Tox.DateTime.shift(datetime, year: 1) == expected
@@ -227,7 +227,7 @@ defmodule Tox.DateTimeTest do
     end
 
     test "adds no durations" do
-      {:ambiguous, datetime, _} =
+      {:ambiguous, datetime, _second_datetime} =
         DateTime.from_naive(~N[2063-04-01 02:37:21], "Australia/Victoria")
 
       assert Tox.DateTime.shift(datetime, []) == datetime
@@ -253,14 +253,18 @@ defmodule Tox.DateTimeTest do
     end
 
     test "subtract hours starting in an ambiguous period (earlier)" do
-      {:ambiguous, datetime, _} = DateTime.from_naive(~N[2068-10-28 01:06:51.201907], "Portugal")
+      {:ambiguous, datetime, _second_datetime} =
+        DateTime.from_naive(~N[2068-10-28 01:06:51.201907], "Portugal")
+
       expected = DateTime.from_naive!(~N[2068-10-26 01:06:51.201907], "Portugal")
 
       assert Tox.DateTime.shift(datetime, hour: -48) == expected
     end
 
     test "subtract hours starting in an ambiguous period (later)" do
-      {:ambiguous, _, datetime} = DateTime.from_naive(~N[2068-10-28 01:06:51.201907], "Portugal")
+      {:ambiguous, _first_datetime, datetime} =
+        DateTime.from_naive(~N[2068-10-28 01:06:51.201907], "Portugal")
+
       expected = DateTime.from_naive!(~N[2068-10-26 02:06:51.201907], "Portugal")
 
       assert Tox.DateTime.shift(datetime, hour: -48) == expected

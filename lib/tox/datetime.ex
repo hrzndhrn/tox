@@ -401,7 +401,7 @@ defmodule Tox.DateTime do
           year: year,
           month: month,
           day: day,
-          microsecond: {_, precision}
+          microsecond: {_microsecon, precision}
         },
         time_zone_database \\ Calendar.get_time_zone_database()
       ) do
@@ -459,14 +459,14 @@ defmodule Tox.DateTime do
       do: raise(ArgumentError, "from is equal or greater as to")
 
     case {DateTime.compare(datetime, from), DateTime.compare(datetime, to), boundaries} do
-      {:lt, _, _} -> false
-      {_, :gt, _} -> false
-      {:eq, _, :closed} -> true
-      {:eq, _, :right_open} -> true
-      {_, :eq, :closed} -> true
-      {_, :eq, :left_open} -> true
-      {:gt, :lt, _} -> true
-      {_, _, _} -> false
+      {:lt, _to, _boundaries} -> false
+      {_from, :gt, _boundaries} -> false
+      {:eq, _to, :closed} -> true
+      {:eq, _to, :right_open} -> true
+      {_from, :eq, :closed} -> true
+      {_from, :eq, :left_open} -> true
+      {:gt, :lt, _boundaries} -> true
+      {_from, _to, _boundaries} -> false
     end
   end
 
@@ -581,10 +581,10 @@ defmodule Tox.DateTime do
          {:ok, new_datetime} <- DateTime.from_naive(naive_datetime, time_zone, time_zone_database) do
       new_datetime
     else
-      {:gap, new_datetime, _} ->
+      {:gap, new_datetime, _second_datetime} ->
         new_datetime
 
-      {:ambiguous, _, new_datetime} ->
+      {:ambiguous, _first_datetime, new_datetime} ->
         new_datetime
 
       {:error, reason} ->
@@ -637,7 +637,7 @@ defmodule Tox.DateTime do
   end
 
   defp shift_time(
-         %{calendar: calendar, microsecond: {_, precision}} = datetime,
+         %{calendar: calendar, microsecond: {_microsecond, precision}} = datetime,
          durations,
          time_zone_database
        ) do
@@ -649,10 +649,10 @@ defmodule Tox.DateTime do
 
   defp adjust_datetime(naive_datetime, from_datetime, time_zone, time_zone_database) do
     case time_zone_database.time_zone_periods_from_wall_datetime(naive_datetime, time_zone) do
-      {:ok, _} ->
+      {:ok, _datetime} ->
         DateTime.from_naive(naive_datetime, time_zone, time_zone_database)
 
-      {_, _, _} = gap_or_ambiguous ->
+      {_gap_ro_ambiguous, _first_datetime, _second_datetime} = gap_or_ambiguous ->
         adjust_datetime(
           gap_or_ambiguous,
           naive_datetime,
@@ -661,14 +661,14 @@ defmodule Tox.DateTime do
           time_zone_database
         )
 
-      {:error, _} = error ->
+      {:error, _reason} = error ->
         error
     end
   end
 
   defp adjust_datetime(
-         {:gap, {%{std_offset: std_offset1, utc_offset: utc_offset1}, _},
-          {%{std_offset: std_offset2, utc_offset: utc_offset2}, _}},
+         {:gap, {%{std_offset: std_offset1, utc_offset: utc_offset1}, _first_limit},
+          {%{std_offset: std_offset2, utc_offset: utc_offset2}, _second_limit}},
          naive_datetime,
          from_datetime,
          time_zone,
@@ -689,7 +689,7 @@ defmodule Tox.DateTime do
   end
 
   defp adjust_datetime(
-         {:ambiguous, _, _},
+         {:ambiguous, _first_datetime, _second_datetime},
          naive_datetime,
          from_datetime,
          time_zone,
@@ -697,9 +697,9 @@ defmodule Tox.DateTime do
        ) do
     case {NaiveDateTime.compare(from_datetime, naive_datetime),
           DateTime.from_naive(naive_datetime, time_zone, time_zone_database)} do
-      {:eq, _} -> {:ok, from_datetime}
-      {:lt, {:ambiguous, datetime, _}} -> {:ok, datetime}
-      {:gt, {:ambiguous, _, datetime}} -> {:ok, datetime}
+      {:eq, _datetime} -> {:ok, from_datetime}
+      {:lt, {:ambiguous, datetime, _second_datetime}} -> {:ok, datetime}
+      {:gt, {:ambiguous, _first_datetime, datetime}} -> {:ok, datetime}
     end
   end
 
@@ -740,10 +740,10 @@ defmodule Tox.DateTime do
            DateTime.from_naive(naive_datetime, time_zone, time_zone_database) do
       datetime
     else
-      {:gap, _, datetime} ->
+      {:gap, _first_datetime, datetime} ->
         datetime
 
-      {:ambiguous, datetime, _} ->
+      {:ambiguous, datetime, _second_datetime} ->
         %{
           datetime
           | year: year,

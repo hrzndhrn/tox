@@ -39,14 +39,14 @@ defmodule Tox.Time do
           hour: hour,
           minute: minute,
           second: second,
-          microsecond: {_, precision} = microsecond
+          microsecond: {_microsecond, precision} = microsecond
         },
         durations
       ) do
     {parts_in_day, parts_per_day} =
       calendar.time_to_day_fraction(hour, minute, second, microsecond)
 
-    {_, {parts, _}} = IsoDays.from_durations_time(durations, calendar, precision)
+    {_days, {parts, _fraction}} = IsoDays.from_durations_time(durations, calendar, precision)
 
     from_day_fraction({parts_in_day + parts, parts_per_day}, calendar)
   end
@@ -225,14 +225,14 @@ defmodule Tox.Time do
       do: raise(ArgumentError, "from is equal or greater as to")
 
     case {Time.compare(time, from), Time.compare(time, to), boundaries} do
-      {:lt, _, _} -> false
-      {_, :gt, _} -> false
-      {:eq, _, :closed} -> true
-      {:eq, _, :right_open} -> true
-      {_, :eq, :closed} -> true
-      {_, :eq, :left_open} -> true
-      {:gt, :lt, _} -> true
-      {_, _, _} -> false
+      {:lt, _to, _boundaries} -> false
+      {_from, :gt, _boundaries} -> false
+      {:eq, _to, :closed} -> true
+      {:eq, _to, :right_open} -> true
+      {_from, :eq, :closed} -> true
+      {_from, :eq, :left_open} -> true
+      {:gt, :lt, _boundaries} -> true
+      {_from, _to, _boundaries} -> false
     end
   end
 
@@ -289,7 +289,7 @@ defmodule Tox.Time do
   @spec max_tuple(Calendar.calendar()) ::
           {Calendar.hour(), Calendar.minute(), Calendar.second(), Calendar.microsecond()}
   def max_tuple(calendar) do
-    {_, parts_per_day} = calendar.time_to_day_fraction(0, 0, 0, {0, 0})
+    {_parts, parts_per_day} = calendar.time_to_day_fraction(0, 0, 0, {0, 0})
     calendar.time_from_day_fraction({parts_per_day - 1, parts_per_day})
   end
 

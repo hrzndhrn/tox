@@ -260,14 +260,14 @@ defmodule Tox.Date do
       do: raise(ArgumentError, "from is equal or greater as to")
 
     case {Date.compare(date, from), Date.compare(date, to), boundaries} do
-      {:lt, _, _} -> false
-      {_, :gt, _} -> false
-      {:eq, _, :closed} -> true
-      {:eq, _, :right_open} -> true
-      {_, :eq, :closed} -> true
-      {_, :eq, :left_open} -> true
-      {:gt, :lt, _} -> true
-      {_, _, _} -> false
+      {:lt, _to, _boundaries} -> false
+      {_from, :gt, _boundaries} -> false
+      {:eq, _to, :closed} -> true
+      {:eq, _to, :right_open} -> true
+      {_from, :eq, :closed} -> true
+      {_from, :eq, :left_open} -> true
+      {:gt, :lt, _boundaries} -> true
+      {_from, _to, _boundaries} -> false
     end
   end
 

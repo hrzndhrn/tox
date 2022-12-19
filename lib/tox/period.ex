@@ -425,7 +425,7 @@ defmodule Tox.Period.Sigil do
   def sigil_P(string, _modifiers) do
     case Period.parse(string) do
       {:ok, period} -> period
-      {:error, _} -> raise ArgumentError, "cannot parse #{inspect(string)} as period"
+      {:error, _reason} -> raise ArgumentError, "cannot parse #{inspect(string)} as period"
     end
   end
 end

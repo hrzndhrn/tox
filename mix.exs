@@ -77,7 +77,7 @@ defmodule Tox.MixProject do
   defp elixirc_paths(env) do
     case env do
       :test -> ["lib", "test/support"]
-      _ -> ["lib"]
+      _else -> ["lib"]
     end
   end
 
