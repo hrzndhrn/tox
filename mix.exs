@@ -5,7 +5,7 @@ defmodule Tox.MixProject do
     [
       app: :tox,
       version: "0.2.3",
-      elixir: "~> 1.8",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
