@@ -35,7 +35,9 @@ defmodule Tox.MixProject do
         "README.md",
         "CHANGELOG.md"
       ],
-      main: "readme"
+      main: "readme",
+      formatters: ["html"],
+      skip_undefined_reference_warnings_on: ["CHANGELOG.md"]
     ]
   end
 
@@ -92,7 +94,6 @@ defmodule Tox.MixProject do
       {:cldr_calendars_coptic, "~> 1.0.0-rc.0", only: [:dev, :test]},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
-      {:earmark, "1.4.15", only: [:dev, :test], override: true},
       {:excoveralls, "~> 0.13", only: :test, runtime: false},
       {:ex_cldr_calendars, "~> 1.17-rc", only: [:dev, :test], override: true},
       {:ex_cldr_calendars_ethiopic, "~> 0.4", only: [:dev, :test]},

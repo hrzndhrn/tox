@@ -4,7 +4,7 @@ defmodule Tox.Interval do
 
   A time interval is the intervening time between two time points. The amount of
   intervening time is expressed by a combination of `DateTime`/`DateTime`,
-  `Datetime`/`Period` or `Period`/`DateTime`.
+  `DateTime`/`Period` or `Period`/`DateTime`.
 
   The key `boundaries` indicates whether the `start` and the `ending` belong to
   the interval.
