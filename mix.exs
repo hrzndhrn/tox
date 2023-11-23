@@ -1,10 +1,13 @@
 defmodule Tox.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/hrzndhrn/tox"
+  @version "0.2.4"
+
   def project do
     [
       app: :tox,
-      version: "0.2.3",
+      version:  @version,
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -37,7 +40,9 @@ defmodule Tox.MixProject do
       ],
       main: "readme",
       formatters: ["html"],
-      skip_undefined_reference_warnings_on: ["CHANGELOG.md"]
+      skip_undefined_reference_warnings_on: ["CHANGELOG.md"],
+      source_ref: "v#{@version}",
+      source_url: @source_url
     ]
   end
 
@@ -45,7 +50,7 @@ defmodule Tox.MixProject do
     [
       maintainers: ["Marcus Kruse"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/hrzndhrn/tox"},
+      links: %{"GitHub" => @source_url},
       files: [
         "lib",
         "mix.exs",
@@ -76,12 +81,8 @@ defmodule Tox.MixProject do
     ]
   end
 
-  defp elixirc_paths(env) do
-    case env do
-      :test -> ["lib", "test/support"]
-      _else -> ["lib"]
-    end
-  end
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_env), do: ["lib"]
 
   defp aliases do
     [
@@ -91,13 +92,14 @@ defmodule Tox.MixProject do
 
   defp deps do
     [
-      {:cldr_calendars_coptic, "~> 1.0.0-rc.0", only: [:dev, :test]},
+      {:ex_cldr_calendars_coptic, "~> 1.0", only: [:dev, :test]},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
       {:excoveralls, "~> 0.13", only: :test, runtime: false},
-      {:ex_cldr_calendars, "~> 1.17-rc", only: [:dev, :test], override: true},
-      {:ex_cldr_calendars_ethiopic, "~> 0.4", only: [:dev, :test]},
+      {:ex_cldr_calendars, "~> 1.21", only: [:dev, :test], override: true},
+      {:ex_cldr_calendars_ethiopic, "~> 1.0", only: [:dev, :test]},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
+      {:recode, "~> 0.6", only: :dev},
       {:stream_data, "~> 0.5", only: [:dev, :test]},
       {:time_zone_info, "~> 0.5", only: [:test, :dev]}
     ]
