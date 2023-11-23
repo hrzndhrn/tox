@@ -375,13 +375,13 @@ defmodule Tox.Period do
     alias Tox.Period
 
     @designators %{
-      year: 'Y',
-      month: 'M',
-      week: 'W',
-      day: 'D',
-      hour: 'H',
-      minute: 'M',
-      second: 'S'
+      year: ~c"Y",
+      month: ~c"M",
+      week: ~c"W",
+      day: ~c"D",
+      hour: ~c"H",
+      minute: ~c"M",
+      second: ~c"S"
     }
 
     @spec to_string(Period.t()) :: String.t()

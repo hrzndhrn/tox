@@ -7,7 +7,7 @@ defmodule Tox.MixProject do
   def project do
     [
       app: :tox,
-      version:  @version,
+      version: @version,
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
