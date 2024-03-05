@@ -5,6 +5,7 @@ defmodule Generator do
   @calendars [
     Calendar.ISO,
     Cldr.Calendar.Coptic
+
     # Use Cldr.Calendar.Ethiopic again when a new version of the package is released.
     # Cldr.Calendar.Ethiopic
   ]

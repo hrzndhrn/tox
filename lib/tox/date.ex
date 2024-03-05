@@ -304,10 +304,9 @@ defmodule Tox.Date do
       ~D[2020-11-09]
 
   """
+  @deprecated "Use: Date.beginning_of_week/2 instead"
   @spec beginning_of_week(Calendar.date()) :: Calendar.date()
-  def beginning_of_week(date) do
-    shift(date, day: Tox.Calendar.beginning_of_week(date))
-  end
+  def beginning_of_week(date), do: Date.beginning_of_week(date)
 
   @doc """
   Returns a date representing the end of the year.

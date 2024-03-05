@@ -237,7 +237,7 @@ defmodule Tox.DateTimeTest do
       datetime = DateTime.from_naive!(~N[2000-11-30 12:00:00], "Europe/Berlin")
       expected = DateTime.from_naive!(~N[2000-12-31 12:00:00], "Europe/Berlin")
 
-      assert datetime |> Tox.DateTime.shift(day: 1, month: 1) == expected
+      assert Tox.DateTime.shift(datetime, day: 1, month: 1) == expected
       assert datetime |> Tox.DateTime.shift(month: 1) |> Tox.DateTime.shift(day: 1) == expected
 
       assert datetime |> Tox.DateTime.shift(day: 1) |> Tox.DateTime.shift(month: 1) ==

@@ -260,8 +260,8 @@ defmodule Tox.NaiveDateTime do
   @spec beginning_of_week(Calendar.naive_datetime()) :: NaiveDateTime.t()
   def beginning_of_week(naive_datetime) do
     naive_datetime
-    |> shift(day: Tox.Calendar.beginning_of_week(naive_datetime))
-    |> beginning_of_day()
+    |> Date.beginning_of_week()
+    |> NaiveDateTime.new!(~T[00:00:00])
   end
 
   @doc """
