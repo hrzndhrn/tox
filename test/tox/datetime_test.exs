@@ -175,9 +175,9 @@ defmodule Tox.DateTimeTest do
       assert Tox.DateTime.shift(earlier, hour: 46, minute: 59, second: 60) == later
     end
 
-    test "resulting in a gap with coptic calendar" do
+    test "resulting in a gap with holocene calendar" do
       datetime = %DateTime{
-        calendar: Cldr.Calendar.Coptic,
+        calendar: Calendar.Holocene,
         day: 3,
         hour: 2,
         microsecond: {860_034, 6},
@@ -193,18 +193,18 @@ defmodule Tox.DateTimeTest do
 
       assert Tox.DateTime.shift(datetime, microsecond: -142, day: -44, year: 159) ==
                %DateTime{
-                 calendar: Cldr.Calendar.Coptic,
-                 day: 19,
-                 hour: 3,
+                 calendar: Calendar.Holocene,
+                 day: 21,
+                 hour: 2,
                  microsecond: {859_892, 6},
                  minute: 31,
                  month: 7,
                  second: 28,
-                 std_offset: 3600,
+                 std_offset: 0,
                  time_zone: "CET",
                  utc_offset: 3600,
                  year: 1944,
-                 zone_abbr: "CEST"
+                 zone_abbr: "CET"
                }
     end
 
@@ -371,7 +371,7 @@ defmodule Tox.DateTimeTest do
     end
 
     test "with an ambiguous datetime" do
-      # DateTime<1724-12-25 11:54:19.865412+01:00 +01 Africa/El_Aaiun Cldr.Calendar.Coptic>
+      # DateTime<1724-12-25 11:54:19.865412+01:00 +01 Africa/El_Aaiun Calendar.Holocene>
       datetime = %DateTime{
         calendar: Calendar.ISO,
         day: 31,

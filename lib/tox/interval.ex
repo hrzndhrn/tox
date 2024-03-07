@@ -228,7 +228,7 @@ defmodule Tox.Interval do
       ...>   DateTime.from_naive!(~N[2020-01-02 00:00:00], "Europe/Berlin")
       ...> )
       iex> Tox.Interval.next(interval)
-      #Tox.Interval<[2020-01-02T00:00:00+01:00/2020-01-03T00:00:00+01:00[>
+      #Tox.Interval<[2020-01-02T00:00:00.000000+01:00/2020-01-03T00:00:00.000000+01:00[>
 
   """
   @spec next(t()) :: t()

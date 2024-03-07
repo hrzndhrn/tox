@@ -93,12 +93,12 @@ defmodule Tox.DateTime do
       iex> datetime =
       ...>   ~N[2020-10-26 02:30:00]
       ...>   |> DateTime.from_naive!("Africa/Nairobi")
-      ...>   |> DateTime.convert!(Cldr.Calendar.Ethiopic)
+      ...>   |> DateTime.convert!(Calendar.Holocene)
       ...>
       ...> to_string(datetime)
-      "2013-02-16 02:30:00+03:00 EAT Africa/Nairobi"
+      "12020-10-26 02:30:00+03:00 EAT Africa/Nairobi"
       iex> datetime |> Tox.DateTime.shift(month: 13) |> to_string()
-      "2014-02-16 02:30:00+03:00 EAT Africa/Nairobi"
+      "12021-11-26 02:30:00+03:00 EAT Africa/Nairobi"
 
   """
   @spec shift(Calendar.datetime(), [Tox.duration()], Calendar.time_zone_database()) ::
@@ -152,10 +152,8 @@ defmodule Tox.DateTime do
       true
 
   """
-  defmacro after?(datetime1, datetime2) do
-    quote do
-      DateTime.compare(unquote(datetime1), unquote(datetime2)) == :gt
-    end
+  def after?(datetime1, datetime2) do
+    DateTime.compare(datetime1, datetime2) == :gt
   end
 
   @doc """
@@ -190,10 +188,8 @@ defmodule Tox.DateTime do
       true
 
   """
-  defmacro after_or_equal?(datetime1, datetime2) do
-    quote do
-      DateTime.compare(unquote(datetime1), unquote(datetime2)) in [:gt, :eq]
-    end
+  def after_or_equal?(datetime1, datetime2) do
+    DateTime.compare(datetime1, datetime2) in [:gt, :eq]
   end
 
   @doc """
@@ -227,10 +223,8 @@ defmodule Tox.DateTime do
       true
 
   """
-  defmacro equal?(datetime1, datetime2) do
-    quote do
-      DateTime.compare(unquote(datetime1), unquote(datetime2)) == :eq
-    end
+  def equal?(datetime1, datetime2) do
+    DateTime.compare(datetime1, datetime2) == :eq
   end
 
   @doc """
@@ -263,10 +257,8 @@ defmodule Tox.DateTime do
       ...> )
       true
   """
-  defmacro before?(datetime1, datetime2) do
-    quote do
-      DateTime.compare(unquote(datetime1), unquote(datetime2)) == :lt
-    end
+  def before?(datetime1, datetime2) do
+    DateTime.compare(datetime1, datetime2) == :lt
   end
 
   @doc """
@@ -299,10 +291,8 @@ defmodule Tox.DateTime do
       ...> )
       true
   """
-  defmacro before_or_equal?(datetime1, datetime2) do
-    quote do
-      DateTime.compare(unquote(datetime1), unquote(datetime2)) in [:lt, :eq]
-    end
+  def before_or_equal?(datetime1, datetime2) do
+    DateTime.compare(datetime1, datetime2) in [:lt, :eq]
   end
 
   @doc """
@@ -480,17 +470,17 @@ defmodule Tox.DateTime do
       iex> |> Tox.DateTime.end_of_year()
       #DateTime<2020-12-31 23:59:59.999999+01:00 CET Europe/Berlin>
 
-  With the Ethiopic calendar.
+  With the Holocene calendar.
 
       iex> datetime =
       ...>   ~N[2020-10-26 02:30:00]
       ...>   |> DateTime.from_naive!("Africa/Nairobi")
-      ...>   |> DateTime.convert!(Cldr.Calendar.Ethiopic)
+      ...>   |> DateTime.convert!(Calendar.Holocene)
       ...>
       ...> to_string(datetime)
-      "2013-02-16 02:30:00+03:00 EAT Africa/Nairobi"
+      "12020-10-26 02:30:00+03:00 EAT Africa/Nairobi"
       iex> datetime |> Tox.DateTime.end_of_year() |> to_string()
-      "2013-13-05 23:59:59.999999+03:00 EAT Africa/Nairobi"
+      "12020-12-31 23:59:59.999999+03:00 EAT Africa/Nairobi"
 
   """
   @spec end_of_year(Calendar.datetime(), Calendar.time_zone_database()) :: DateTime.t()
@@ -619,7 +609,7 @@ defmodule Tox.DateTime do
 
       iex> ~N[2020-06-04 11:12:13]
       ...> |> DateTime.from_naive!("Etc/UTC")
-      ...> |> DateTime.convert(Cldr.Calendar.Coptic)
+      ...> |> DateTime.convert(Calendar.Holocene)
       ...> |> Tox.DateTime.week()
       ** (FunctionClauseError) no function clause matching in Tox.DateTime.week/1
 

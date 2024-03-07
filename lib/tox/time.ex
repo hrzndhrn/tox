@@ -66,16 +66,14 @@ defmodule Tox.Time do
       false
 
       iex> Tox.Time.after?(
-      ...>   Time.convert!(~T[23:23:23], Cldr.Calendar.Coptic),
-      ...>   Time.convert!(~T[01:59:59], Cldr.Calendar.Coptic)
+      ...>   Time.convert!(~T[23:23:23], Calendar.Holocene),
+      ...>   Time.convert!(~T[01:59:59], Calendar.Holocene)
       ...> )
       true
 
   """
-  defmacro after?(time1, time2) do
-    quote do
-      Time.compare(unquote(time1), unquote(time2)) == :gt
-    end
+  def after?(time1, time2) do
+    Time.compare(time1, time2) == :gt
   end
 
   @doc """
@@ -93,16 +91,14 @@ defmodule Tox.Time do
       true
 
       iex> Tox.Time.after_or_equal?(
-      ...>   Time.convert!(~T[23:23:23], Cldr.Calendar.Coptic),
-      ...>   Time.convert!(~T[01:59:59], Cldr.Calendar.Coptic)
+      ...>   Time.convert!(~T[23:23:23], Calendar.Holocene),
+      ...>   Time.convert!(~T[01:59:59], Calendar.Holocene)
       ...> )
       true
 
   """
-  defmacro after_or_equal?(time1, time2) do
-    quote do
-      Time.compare(unquote(time1), unquote(time2)) in [:gt, :eq]
-    end
+  def after_or_equal?(time1, time2) do
+    Time.compare(time1, time2) in [:gt, :eq]
   end
 
   @doc """
@@ -117,10 +113,8 @@ defmodule Tox.Time do
       true
 
   """
-  defmacro equal?(time1, time2) do
-    quote do
-      Time.compare(unquote(time1), unquote(time2)) == :eq
-    end
+  def equal?(time1, time2) do
+    Time.compare(time1, time2) == :eq
   end
 
   @doc """
@@ -138,16 +132,14 @@ defmodule Tox.Time do
       false
 
       iex> Tox.Time.before?(
-      ...>   Time.convert!(~T[23:23:23], Cldr.Calendar.Coptic),
-      ...>   Time.convert!(~T[01:59:59], Cldr.Calendar.Coptic)
+      ...>   Time.convert!(~T[23:23:23], Calendar.Holocene),
+      ...>   Time.convert!(~T[01:59:59], Calendar.Holocene)
       ...> )
       false
 
   """
-  defmacro before?(time1, time2) do
-    quote do
-      Time.compare(unquote(time1), unquote(time2)) == :lt
-    end
+  def before?(time1, time2) do
+    Time.compare(time1, time2) == :lt
   end
 
   @doc """
@@ -165,16 +157,14 @@ defmodule Tox.Time do
       true
 
       iex> Tox.Time.before_or_equal?(
-      ...>   Time.convert!(~T[23:23:23], Cldr.Calendar.Coptic),
-      ...>   Time.convert!(~T[01:59:59], Cldr.Calendar.Coptic)
+      ...>   Time.convert!(~T[23:23:23], Calendar.Holocene),
+      ...>   Time.convert!(~T[01:59:59], Calendar.Holocene)
       ...> )
       false
 
   """
-  defmacro before_or_equal?(time1, time2) do
-    quote do
-      Time.compare(unquote(time1), unquote(time2)) in [:lt, :eq]
-    end
+  def before_or_equal?(time1, time2) do
+    Time.compare(time1, time2) in [:lt, :eq]
   end
 
   @doc """
@@ -244,13 +234,13 @@ defmodule Tox.Time do
       iex> Tox.Time.min()
       ~T[00:00:00]
 
-      iex> Tox.Time.min(Cldr.Calendar.Coptic)
+      iex> Tox.Time.min(Calendar.Holocene)
       %Time{
         hour: 0,
         minute: 0,
         second: 0,
         microsecond: {0, 0},
-        calendar: Cldr.Calendar.Coptic
+        calendar: Calendar.Holocene
       }
 
   """
@@ -268,13 +258,13 @@ defmodule Tox.Time do
       iex> Tox.Time.max()
       ~T[23:59:59.999999]
 
-      iex> Tox.Time.max(Cldr.Calendar.Ethiopic)
+      iex> Tox.Time.max(Calendar.Holocene)
       %Time{
         hour: 23,
         minute: 59,
         second: 59,
         microsecond: {999999, 6},
-        calendar: Cldr.Calendar.Ethiopic
+        calendar: Calendar.Holocene
       }
 
   """

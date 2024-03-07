@@ -14,9 +14,7 @@ The tests and examples are using the time zone database from
 [`TimeZoneInfo`](https://github.com/hrzndhrn/time_zone_info)
 and the calendars
 [`Calendar.ISO`](https://hexdocs.pm/elixir/Calendar.ISO.html#content),
-[`Cldr.Calendar.Coptic`](https://github.com/elixir-cldr/cldr_calendars_coptic)
-and
-[`Cldr.Calendar.Ethiopic`](https://github.com/elixir-cldr/cldr_calendars_ethiopic).
+[`Calendar.Holocene`](https://en.wikipedia.org/wiki/Holocene_calendar), which is based on the Proleptic Gregorian calendar with every year + 10000.
 
 ## Installation
 

@@ -69,7 +69,8 @@ defmodule Tox.DateTest do
 
   property "beginning_of_month/1" do
     check all date <- Generator.date() do
-      assert %Date{} = result = Tox.Date.beginning_of_month(date)
+      result = Tox.Date.beginning_of_month(date)
+
       assert result.year == date.year
       assert result.month == date.month
       assert result.day == 1
@@ -79,7 +80,7 @@ defmodule Tox.DateTest do
 
   property "beginning_of_week/1" do
     check all %{calendar: calendar} = date <- Generator.date() do
-      assert %Date{} = result = Tox.Date.beginning_of_week(date)
+      result = Tox.Date.beginning_of_week(date)
 
       year_range = (date.year - 1)..date.year
 
