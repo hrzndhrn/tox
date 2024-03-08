@@ -169,9 +169,11 @@ defmodule Calendar.Holocene do
   @impl true
   defdelegate valid_time?(hour, minute, second, microsecond), to: Calendar.ISO
 
-  @impl true
-  defdelegate iso_days_to_beginning_of_day(iso_days), to: Calendar.ISO
+  if Calendar.ISO.__info__(:functions)[:iso_days_to_end_of_day] == 1 do
+    @impl true
+    defdelegate iso_days_to_beginning_of_day(iso_days), to: Calendar.ISO
 
-  @impl true
-  defdelegate iso_days_to_end_of_day(iso_days), to: Calendar.ISO
+    @impl true
+    defdelegate iso_days_to_end_of_day(iso_days), to: Calendar.ISO
+  end
 end
