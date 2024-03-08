@@ -141,9 +141,11 @@ defmodule Calendar.Holocene do
     Calendar.ISO.quarter_of_year(year - 10_000, month, day)
   end
 
-  @impl true
-  def year_of_era(year, month, day) do
-    Calendar.ISO.year_of_era(year - 10_000, month, day)
+  if {:year_of_era, 3} in Calendar.ISO.__info__(:functions) do
+    @impl true
+    def year_of_era(year, month, day) do
+      Calendar.ISO.year_of_era(year - 10_000, month, day)
+    end
   end
 
   @impl true
@@ -169,7 +171,7 @@ defmodule Calendar.Holocene do
   @impl true
   defdelegate valid_time?(hour, minute, second, microsecond), to: Calendar.ISO
 
-  if Calendar.ISO.__info__(:functions)[:iso_days_to_end_of_day] == 1 do
+  if {:iso_days_to_end_of_day, 1} in Calendar.ISO.__info__(:functions) do
     @impl true
     defdelegate iso_days_to_beginning_of_day(iso_days), to: Calendar.ISO
 
