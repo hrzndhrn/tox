@@ -228,7 +228,7 @@ defmodule Tox.Interval do
       ...>   DateTime.from_naive!(~N[2020-01-02 00:00:00], "Europe/Berlin")
       ...> )
       iex> Tox.Interval.next(interval)
-      #Tox.Interval<[2020-01-02T00:00:00.000000+01:00/2020-01-03T00:00:00.000000+01:00[>
+      #Tox.Interval<[2020-01-02T00:00:00+01:00/2020-01-03T00:00:00+01:00[>
 
   """
   @spec next(t()) :: t()
@@ -247,7 +247,10 @@ defmodule Tox.Interval do
 
   defp next(%DateTime{} = start, %DateTime{} = ending) do
     diff = DateTime.diff(ending, start, :microsecond)
-    {DateTime.add(start, diff, :microsecond), DateTime.add(ending, diff, :microsecond)}
+    start = DateTime.add(start, diff, :microsecond)
+    ending = DateTime.add(ending, diff, :microsecond)
+
+    {prune_precision(start), prune_precision(ending)}
   end
 
   @doc """
@@ -348,6 +351,14 @@ defmodule Tox.Interval do
   end
 
   defp valid?(_start, _ending, _boundaries), do: false
+
+  defp prune_precision(%{microsecond: {0, _precision}} = datetime) do
+    %{datetime | microsecond: {0, 0}}
+  end
+
+  defp prune_precision(datetime) do
+    datetime
+  end
 
   defimpl Inspect do
     @spec inspect(Tox.Interval.t(), Inspect.Opts.t()) :: String.t()
