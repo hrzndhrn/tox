@@ -152,6 +152,7 @@ defmodule Tox.DateTime do
       true
 
   """
+  @spec after?(Calendar.datetime(), Calendar.datetime()) :: boolean
   def after?(datetime1, datetime2) do
     DateTime.compare(datetime1, datetime2) == :gt
   end
@@ -188,6 +189,7 @@ defmodule Tox.DateTime do
       true
 
   """
+  @spec after_or_equal?(Calendar.datetime(), Calendar.datetime()) :: boolean
   def after_or_equal?(datetime1, datetime2) do
     DateTime.compare(datetime1, datetime2) in [:gt, :eq]
   end
@@ -223,6 +225,7 @@ defmodule Tox.DateTime do
       true
 
   """
+  @spec equal?(Calendar.datetime(), Calendar.datetime()) :: boolean
   def equal?(datetime1, datetime2) do
     DateTime.compare(datetime1, datetime2) == :eq
   end
@@ -257,6 +260,7 @@ defmodule Tox.DateTime do
       ...> )
       true
   """
+  @spec before?(Calendar.datetime(), Calendar.datetime()) :: boolean
   def before?(datetime1, datetime2) do
     DateTime.compare(datetime1, datetime2) == :lt
   end
@@ -291,6 +295,7 @@ defmodule Tox.DateTime do
       ...> )
       true
   """
+  @spec before_or_equal?(Calendar.datetime(), Calendar.datetime()) :: boolean
   def before_or_equal?(datetime1, datetime2) do
     DateTime.compare(datetime1, datetime2) in [:lt, :eq]
   end

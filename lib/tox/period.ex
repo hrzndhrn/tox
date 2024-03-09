@@ -123,7 +123,7 @@ defmodule Tox.Period do
   """
   @spec new([duration()]) :: {:ok, t()} | {:error, :invalid_period}
   def new(durations) do
-    case is_valid?(durations) do
+    case valid?(durations) do
       true -> {:ok, struct(__MODULE__, durations)}
       false -> {:error, :invalid_period}
     end
@@ -255,7 +255,7 @@ defmodule Tox.Period do
 
   # Helpers
 
-  defp is_valid?(durations) do
+  defp valid?(durations) do
     Enum.any?(durations, fn {_unit, value} -> value > 0 end) &&
       Enum.all?(durations, fn
         {:second, value} -> is_number(value) && value >= 0

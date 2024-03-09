@@ -72,6 +72,7 @@ defmodule Tox.Time do
       true
 
   """
+  @spec after?(Calendar.time(), Calendar.time()) :: boolean
   def after?(time1, time2) do
     Time.compare(time1, time2) == :gt
   end
@@ -97,6 +98,7 @@ defmodule Tox.Time do
       true
 
   """
+  @spec after_or_equal?(Calendar.time(), Calendar.time()) :: boolean
   def after_or_equal?(time1, time2) do
     Time.compare(time1, time2) in [:gt, :eq]
   end
@@ -113,6 +115,7 @@ defmodule Tox.Time do
       true
 
   """
+  @spec equal?(Calendar.time(), Calendar.time()) :: boolean
   def equal?(time1, time2) do
     Time.compare(time1, time2) == :eq
   end
@@ -138,6 +141,7 @@ defmodule Tox.Time do
       false
 
   """
+  @spec before?(Calendar.time(), Calendar.time()) :: boolean
   def before?(time1, time2) do
     Time.compare(time1, time2) == :lt
   end
@@ -163,6 +167,7 @@ defmodule Tox.Time do
       false
 
   """
+  @spec before_or_equal?(Calendar.time(), Calendar.time()) :: boolean
   def before_or_equal?(time1, time2) do
     Time.compare(time1, time2) in [:lt, :eq]
   end

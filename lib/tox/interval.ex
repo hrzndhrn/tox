@@ -107,7 +107,7 @@ defmodule Tox.Interval do
   """
   @spec new(boundary(), boundary(), Tox.boundaries()) :: {:ok, t()} | {:error, :invalid_interval}
   def new(start, ending, boundaries \\ :right_open) do
-    case is_valid?(start, ending, boundaries) do
+    case valid?(start, ending, boundaries) do
       true -> {:ok, struct(__MODULE__, start: start, ending: ending, boundaries: boundaries)}
       false -> {:error, :invalid_interval}
     end
@@ -337,7 +337,7 @@ defmodule Tox.Interval do
 
   # Helpers
 
-  defp is_valid?(%start_module{} = start, %ending_module{} = ending, boundaries)
+  defp valid?(%start_module{} = start, %ending_module{} = ending, boundaries)
        when boundaries in [:open, :closed, :left_open, :right_open] do
     case {start_module, ending_module} do
       {Period, Period} -> false
@@ -347,7 +347,7 @@ defmodule Tox.Interval do
     end
   end
 
-  defp is_valid?(_start, _ending, _boundaries), do: false
+  defp valid?(_start, _ending, _boundaries), do: false
 
   defimpl Inspect do
     @spec inspect(Tox.Interval.t(), Inspect.Opts.t()) :: String.t()

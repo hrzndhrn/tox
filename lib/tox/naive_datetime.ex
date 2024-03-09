@@ -93,6 +93,7 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
+  @spec after?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
   def after?(naive_datetime1, naive_datetime2) do
     NaiveDateTime.compare(naive_datetime1, naive_datetime2) == :gt
   end
@@ -122,6 +123,7 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
+  @spec after_or_equal?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
   def after_or_equal?(naive_datetime1, naive_datetime2) do
     NaiveDateTime.compare(naive_datetime1, naive_datetime2) in [:gt, :eq]
   end
@@ -150,6 +152,7 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
+  @spec equal?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
   def equal?(naive_datetime1, naive_datetime2) do
     NaiveDateTime.compare(naive_datetime1, naive_datetime2) == :eq
   end
@@ -178,6 +181,7 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
+  @spec before?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
   def before?(naive_datetime1, naive_datetime2) do
     NaiveDateTime.compare(naive_datetime1, naive_datetime2) == :lt
   end
@@ -207,6 +211,7 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
+  @spec before_or_equal?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
   def before_or_equal?(naive_datetime1, naive_datetime2) do
     NaiveDateTime.compare(naive_datetime1, naive_datetime2) in [:lt, :eq]
   end

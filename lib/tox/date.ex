@@ -100,6 +100,7 @@ defmodule Tox.Date do
       true
 
   """
+  @spec after?(Calendar.date(), Calendar.date()) :: boolean
   def after?(date1, date2) do
     Date.compare(date1, date2) == :gt
   end
@@ -125,6 +126,7 @@ defmodule Tox.Date do
       true
 
   """
+  @spec after_or_equal?(Calendar.date(), Calendar.date()) :: boolean
   def after_or_equal?(date1, date2) do
     Date.compare(date1, date2) in [:gt, :eq]
   end
@@ -146,6 +148,7 @@ defmodule Tox.Date do
       true
 
   """
+  @spec equal?(Calendar.date(), Calendar.date()) :: boolean
   def equal?(date1, date2) do
     Date.compare(date1, date2) == :eq
   end
@@ -171,6 +174,7 @@ defmodule Tox.Date do
       true
 
   """
+  @spec before?(Calendar.date(), Calendar.date()) :: boolean
   def before?(date1, date2) do
     Date.compare(date1, date2) == :lt
   end
@@ -196,6 +200,7 @@ defmodule Tox.Date do
       true
 
   """
+  @spec before_or_equal?(Calendar.date(), Calendar.date()) :: boolean
   def before_or_equal?(date1, date2) do
     Date.compare(date1, date2) in [:lt, :eq]
   end
