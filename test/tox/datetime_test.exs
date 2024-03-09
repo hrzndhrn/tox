@@ -555,8 +555,8 @@ defmodule Tox.DateTimeTest do
       time_zones = ["Pacific/Enderbury", "Pacific/Kiritimati", "Pacific/Kanton"]
 
       if datetime.time_zone in time_zones and
-           datetime.year == 1994 and
-           datetime.month == 12 do
+           datetime.month == 12 and
+           datetime.year in [1994, 11994] do
         assert result.day == calendar.days_in_month(result.year, result.month) - 1
       else
         assert result.day == calendar.days_in_month(result.year, result.month)
