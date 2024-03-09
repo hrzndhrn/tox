@@ -42,13 +42,13 @@ defmodule Tox.NaiveDateTime do
   Using `shift/2` with a different calendar.
 
       iex> ~N[2012-09-03 02:30:00]
-      ...> |> NaiveDateTime.convert!(Cldr.Calendar.Ethiopic)
+      ...> |> NaiveDateTime.convert!(Calendar.Holocene)
       ...> |> Tox.NaiveDateTime.shift(day: 6)
       %NaiveDateTime{
-        calendar: Cldr.Calendar.Ethiopic,
-        year: 2004,
-        month: 13,
-        day: 4,
+        calendar: Calendar.Holocene,
+        year: 12012,
+        month: 9,
+        day: 9,
         hour: 2,
         minute: 30,
         second: 0,
@@ -93,10 +93,9 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
-  defmacro after?(naive_datetime1, naive_datetime2) do
-    quote do
-      NaiveDateTime.compare(unquote(naive_datetime1), unquote(naive_datetime2)) == :gt
-    end
+  @spec after?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
+  def after?(naive_datetime1, naive_datetime2) do
+    NaiveDateTime.compare(naive_datetime1, naive_datetime2) == :gt
   end
 
   @doc """
@@ -124,10 +123,9 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
-  defmacro after_or_equal?(naive_datetime1, naive_datetime2) do
-    quote do
-      NaiveDateTime.compare(unquote(naive_datetime1), unquote(naive_datetime2)) in [:gt, :eq]
-    end
+  @spec after_or_equal?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
+  def after_or_equal?(naive_datetime1, naive_datetime2) do
+    NaiveDateTime.compare(naive_datetime1, naive_datetime2) in [:gt, :eq]
   end
 
   @doc """
@@ -154,10 +152,9 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
-  defmacro equal?(naive_datetime1, naive_datetime2) do
-    quote do
-      NaiveDateTime.compare(unquote(naive_datetime1), unquote(naive_datetime2)) == :eq
-    end
+  @spec equal?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
+  def equal?(naive_datetime1, naive_datetime2) do
+    NaiveDateTime.compare(naive_datetime1, naive_datetime2) == :eq
   end
 
   @doc """
@@ -184,10 +181,9 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
-  defmacro before?(naive_datetime1, naive_datetime2) do
-    quote do
-      NaiveDateTime.compare(unquote(naive_datetime1), unquote(naive_datetime2)) == :lt
-    end
+  @spec before?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
+  def before?(naive_datetime1, naive_datetime2) do
+    NaiveDateTime.compare(naive_datetime1, naive_datetime2) == :lt
   end
 
   @doc """
@@ -215,10 +211,9 @@ defmodule Tox.NaiveDateTime do
       false
 
   """
-  defmacro before_or_equal?(naive_datetime1, naive_datetime2) do
-    quote do
-      NaiveDateTime.compare(unquote(naive_datetime1), unquote(naive_datetime2)) in [:lt, :eq]
-    end
+  @spec before_or_equal?(Calendar.naive_datetime(), Calendar.naive_datetime()) :: boolean()
+  def before_or_equal?(naive_datetime1, naive_datetime2) do
+    NaiveDateTime.compare(naive_datetime1, naive_datetime2) in [:lt, :eq]
   end
 
   @doc """
@@ -258,10 +253,10 @@ defmodule Tox.NaiveDateTime do
 
   """
   @spec beginning_of_week(Calendar.naive_datetime()) :: NaiveDateTime.t()
-  def beginning_of_week(naive_datetime) do
+  def beginning_of_week(%{calendar: calendar} = naive_datetime) do
     naive_datetime
-    |> shift(day: Tox.Calendar.beginning_of_week(naive_datetime))
-    |> beginning_of_day()
+    |> Date.beginning_of_week()
+    |> NaiveDateTime.new!(Tox.Time.min(calendar))
   end
 
   @doc """
@@ -370,13 +365,13 @@ defmodule Tox.NaiveDateTime do
       iex> Tox.NaiveDateTime.end_of_year(~N[2020-03-29 01:00:00])
       ~N[2020-12-31 23:59:59.999999]
 
-  With the Ethiopic calendar.
+  With the Holocene calendar.
 
-      iex> naive_datetime = NaiveDateTime.convert!(~N[2020-10-26 02:30:00], Cldr.Calendar.Ethiopic)
+      iex> naive_datetime = NaiveDateTime.convert!(~N[2020-10-26 02:30:00], Calendar.Holocene)
       iex> to_string(naive_datetime)
-      "2013-02-16 02:30:00"
+      "12020-10-26 02:30:00"
       iex> naive_datetime |> Tox.NaiveDateTime.end_of_year() |> to_string()
-      "2013-13-05 23:59:59.999999"
+      "12020-12-31 23:59:59.999999"
 
   """
   @spec end_of_year(Calendar.naive_datetime()) :: NaiveDateTime.t()
@@ -459,7 +454,7 @@ defmodule Tox.NaiveDateTime do
       {2020, 1}
 
       iex> ~N[2020-06-04 11:12:13]
-      ...> |> NaiveDateTime.convert(Cldr.Calendar.Coptic)
+      ...> |> NaiveDateTime.convert(Calendar.Holocene)
       ...> |> Tox.NaiveDateTime.week()
       ** (FunctionClauseError) no function clause matching in Tox.NaiveDateTime.week/1
 

@@ -1,8 +1,6 @@
 defmodule ToxTest do
   use ExUnit.Case
 
-  require Tox.DateTime
-
   doctest README
 
   describe "shift/2" do

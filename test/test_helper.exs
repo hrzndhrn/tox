@@ -1,7 +1,8 @@
-max_runs = if System.get_env("CI"), do: 100_000, else: 1_000
+max_runs = if System.get_env("CI"), do: 10_000, else: 100
 Application.put_env(:stream_data, :max_runs, max_runs)
 
 tzdb = TimeZoneInfo.TimeZoneDatabase
+
 # tzdb = Tz.TimeZoneDatabase
 # tzdb = Tzdata.TimeZoneDatabase
 

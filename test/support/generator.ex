@@ -4,9 +4,7 @@ defmodule Generator do
   @units [:year, :month, :week, :day, :hour, :minute, :second, :millisecond, :microsecond]
   @calendars [
     Calendar.ISO,
-    Cldr.Calendar.Coptic
-    # Use Cldr.Calendar.Ethiopic again when a new version of the package is released.
-    # Cldr.Calendar.Ethiopic
+    Calendar.Holocene
   ]
 
   def naive_datetime, do: StreamData.map(naive_datetime_iso(), &convert/1)

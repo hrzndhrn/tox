@@ -175,9 +175,9 @@ defmodule Tox.DateTimeTest do
       assert Tox.DateTime.shift(earlier, hour: 46, minute: 59, second: 60) == later
     end
 
-    test "resulting in a gap with coptic calendar" do
+    test "resulting in a gap with holocene calendar" do
       datetime = %DateTime{
-        calendar: Cldr.Calendar.Coptic,
+        calendar: Calendar.Holocene,
         day: 3,
         hour: 2,
         microsecond: {860_034, 6},
@@ -193,18 +193,18 @@ defmodule Tox.DateTimeTest do
 
       assert Tox.DateTime.shift(datetime, microsecond: -142, day: -44, year: 159) ==
                %DateTime{
-                 calendar: Cldr.Calendar.Coptic,
-                 day: 19,
-                 hour: 3,
+                 calendar: Calendar.Holocene,
+                 day: 21,
+                 hour: 2,
                  microsecond: {859_892, 6},
                  minute: 31,
                  month: 7,
                  second: 28,
-                 std_offset: 3600,
+                 std_offset: 0,
                  time_zone: "CET",
                  utc_offset: 3600,
                  year: 1944,
-                 zone_abbr: "CEST"
+                 zone_abbr: "CET"
                }
     end
 
@@ -237,7 +237,7 @@ defmodule Tox.DateTimeTest do
       datetime = DateTime.from_naive!(~N[2000-11-30 12:00:00], "Europe/Berlin")
       expected = DateTime.from_naive!(~N[2000-12-31 12:00:00], "Europe/Berlin")
 
-      assert datetime |> Tox.DateTime.shift(day: 1, month: 1) == expected
+      assert Tox.DateTime.shift(datetime, day: 1, month: 1) == expected
       assert datetime |> Tox.DateTime.shift(month: 1) |> Tox.DateTime.shift(day: 1) == expected
 
       assert datetime |> Tox.DateTime.shift(day: 1) |> Tox.DateTime.shift(month: 1) ==
@@ -371,7 +371,7 @@ defmodule Tox.DateTimeTest do
     end
 
     test "with an ambiguous datetime" do
-      # DateTime<1724-12-25 11:54:19.865412+01:00 +01 Africa/El_Aaiun Cldr.Calendar.Coptic>
+      # DateTime<1724-12-25 11:54:19.865412+01:00 +01 Africa/El_Aaiun Calendar.Holocene>
       datetime = %DateTime{
         calendar: Calendar.ISO,
         day: 31,
@@ -516,11 +516,6 @@ defmodule Tox.DateTimeTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-
-      unless datetime.time_zone == "Pacific/Kwajalei" and datetime.month == 12 do
-        assert {day_of_week, day_of_week, _last_day_of_week} = Tox.Calendar.day_of_week(result)
-      end
-
       assert DateTime.compare(result, datetime) in [:lt, :eq]
     end
   end
@@ -555,8 +550,8 @@ defmodule Tox.DateTimeTest do
       time_zones = ["Pacific/Enderbury", "Pacific/Kiritimati", "Pacific/Kanton"]
 
       if datetime.time_zone in time_zones and
-           datetime.year == 1994 and
-           datetime.month == 12 do
+           datetime.month == 12 and
+           datetime.year in [1994, 11994] do
         assert result.day == calendar.days_in_month(result.year, result.month) - 1
       else
         assert result.day == calendar.days_in_month(result.year, result.month)

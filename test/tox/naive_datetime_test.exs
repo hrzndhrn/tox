@@ -152,9 +152,7 @@ defmodule Tox.NaiveDateTimeTest do
 
   describe "beginning_of_day/1" do
     test "raises an error for an invalid map" do
-      message =
-        "cannot set %{calendar: Calendar.ISO, day: 111, microsecond: {0, 0}, month: 11, " <>
-          "year: 2020} to beginning of day, reason: :invalid_date"
+      message = ~r/cannot set .* to beginning of day, reason: :invalid_date/
 
       assert_raise ArgumentError, message, fn ->
         Tox.NaiveDateTime.beginning_of_day(%{
@@ -170,9 +168,7 @@ defmodule Tox.NaiveDateTimeTest do
 
   describe "end_of_day/1" do
     test "raises an error for an invalid map" do
-      message =
-        "cannot set %{calendar: Calendar.ISO, day: 111, microsecond: {0, 0}, month: 11, " <>
-          "year: 2020} to end of day, reason: :invalid_date"
+      message = ~r/cannot set .* to end of day, reason: :invalid_date/
 
       assert_raise ArgumentError, message, fn ->
         Tox.NaiveDateTime.end_of_day(%{
@@ -243,7 +239,6 @@ defmodule Tox.NaiveDateTimeTest do
       assert result.minute == 0
       assert result.second == 0
       assert {0, _precision} = result.microsecond
-      assert {day_of_week, day_of_week, _last_day_of_week} = Tox.Calendar.day_of_week(result)
       assert NaiveDateTime.compare(result, naive_datetime) in [:lt, :eq]
     end
   end

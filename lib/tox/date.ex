@@ -41,9 +41,9 @@ defmodule Tox.Date do
   Using `shift/2` with a different calendar.
 
       iex> ~D[2000-12-30]
-      ...> |> Date.convert!(Cldr.Calendar.Coptic)
+      ...> |> Date.convert!(Calendar.Holocene)
       ...> |> Tox.Date.shift(day: 3)
-      %Date{year: 1717, month: 4, day: 24, calendar: Cldr.Calendar.Coptic}
+      %Date{year: 12001, month: 1, day: 2, calendar: Calendar.Holocene}
 
   """
   @spec shift(Calendar.date(), [Tox.duration()]) :: Date.t()
@@ -71,7 +71,7 @@ defmodule Tox.Date do
       iex> Tox.Date.week(~D[2019-12-31])
       {2020, 1}
       iex> ~D[2020-06-04]
-      ...> |> Date.convert(Cldr.Calendar.Ethiopic)
+      ...> |> Date.convert(Calendar.Holocene)
       ...> |> Tox.Date.week()
       ** (FunctionClauseError) no function clause matching in Tox.Date.week/1
 
@@ -94,16 +94,15 @@ defmodule Tox.Date do
       false
 
       iex> Tox.Date.after?(
-      ...>   Date.convert!(~D[2000-01-22], Cldr.Calendar.Coptic),
-      ...>   Date.convert!(~D[2000-01-01], Cldr.Calendar.Coptic)
+      ...>   Date.convert!(~D[2000-01-22], Calendar.Holocene),
+      ...>   Date.convert!(~D[2000-01-01], Calendar.Holocene)
       ...> )
       true
 
   """
-  defmacro after?(date1, date2) do
-    quote do
-      Date.compare(unquote(date1), unquote(date2)) == :gt
-    end
+  @spec after?(Calendar.date(), Calendar.date()) :: boolean
+  def after?(date1, date2) do
+    Date.compare(date1, date2) == :gt
   end
 
   @doc """
@@ -121,16 +120,15 @@ defmodule Tox.Date do
       true
 
       iex> Tox.Date.after_or_equal?(
-      ...>   Date.convert!(~D[2000-01-22], Cldr.Calendar.Ethiopic),
-      ...>   Date.convert!(~D[2000-01-01], Cldr.Calendar.Ethiopic)
+      ...>   Date.convert!(~D[2000-01-22], Calendar.Holocene),
+      ...>   Date.convert!(~D[2000-01-01], Calendar.Holocene)
       ...> )
       true
 
   """
-  defmacro after_or_equal?(date1, date2) do
-    quote do
-      Date.compare(unquote(date1), unquote(date2)) in [:gt, :eq]
-    end
+  @spec after_or_equal?(Calendar.date(), Calendar.date()) :: boolean
+  def after_or_equal?(date1, date2) do
+    Date.compare(date1, date2) in [:gt, :eq]
   end
 
   @doc """
@@ -144,18 +142,15 @@ defmodule Tox.Date do
       iex> Tox.Date.equal?(~D[2020-01-01], ~D[2020-01-01])
       true
 
-      iex> ethiopic = Date.convert!(~D[2000-01-01], Cldr.Calendar.Ethiopic)
-      %Date{year: 1992, month: 4, day: 22, calendar: Cldr.Calendar.Ethiopic}
-      iex> coptic = Date.convert!(~D[2000-01-01], Cldr.Calendar.Coptic)
-      %Date{year: 1716, month: 4, day: 22, calendar: Cldr.Calendar.Coptic}
-      iex> Tox.Date.equal?(ethiopic, coptic)
+      iex> iso = ~D[2000-01-01]
+      iex> holocene = Date.convert!(iso, Calendar.Holocene)
+      iex> Tox.Date.equal?(iso, holocene)
       true
 
   """
-  defmacro equal?(date1, date2) do
-    quote do
-      Date.compare(unquote(date1), unquote(date2)) == :eq
-    end
+  @spec equal?(Calendar.date(), Calendar.date()) :: boolean
+  def equal?(date1, date2) do
+    Date.compare(date1, date2) == :eq
   end
 
   @doc """
@@ -173,16 +168,15 @@ defmodule Tox.Date do
       false
 
       iex> Tox.Date.before?(
-      ...>   Date.convert!(~D[2000-01-22], Cldr.Calendar.Ethiopic),
-      ...>   Date.convert!(~D[2000-06-01], Cldr.Calendar.Ethiopic)
+      ...>   Date.convert!(~D[2000-01-22], Calendar.Holocene),
+      ...>   Date.convert!(~D[2000-06-01], Calendar.Holocene)
       ...> )
       true
 
   """
-  defmacro before?(date1, date2) do
-    quote do
-      Date.compare(unquote(date1), unquote(date2)) == :lt
-    end
+  @spec before?(Calendar.date(), Calendar.date()) :: boolean
+  def before?(date1, date2) do
+    Date.compare(date1, date2) == :lt
   end
 
   @doc """
@@ -200,16 +194,15 @@ defmodule Tox.Date do
       true
 
       iex> Tox.Date.before_or_equal?(
-      ...>   Date.convert!(~D[2000-01-22], Cldr.Calendar.Ethiopic),
-      ...>   Date.convert!(~D[2000-06-01], Cldr.Calendar.Ethiopic)
+      ...>   Date.convert!(~D[2000-01-22], Calendar.Holocene),
+      ...>   Date.convert!(~D[2000-06-01], Calendar.Holocene)
       ...> )
       true
 
   """
-  defmacro before_or_equal?(date1, date2) do
-    quote do
-      Date.compare(unquote(date1), unquote(date2)) in [:lt, :eq]
-    end
+  @spec before_or_equal?(Calendar.date(), Calendar.date()) :: boolean
+  def before_or_equal?(date1, date2) do
+    Date.compare(date1, date2) in [:lt, :eq]
   end
 
   @doc """
@@ -305,9 +298,7 @@ defmodule Tox.Date do
 
   """
   @spec beginning_of_week(Calendar.date()) :: Calendar.date()
-  def beginning_of_week(date) do
-    shift(date, day: Tox.Calendar.beginning_of_week(date))
-  end
+  def beginning_of_week(date), do: Date.beginning_of_week(date)
 
   @doc """
   Returns a date representing the end of the year.
@@ -319,9 +310,9 @@ defmodule Tox.Date do
       ~D[2020-12-31]
 
       iex> ~D[2020-11-11]
-      iex> |> Date.convert!(Cldr.Calendar.Coptic)
+      iex> |> Date.convert!(Calendar.Holocene)
       iex> |> Tox.Date.end_of_year()
-      %Date{year: 1737, month: 13, day: 5, calendar: Cldr.Calendar.Coptic}
+      %Date{year: 12020, month: 12, day: 31, calendar: Calendar.Holocene}
 
   """
   @spec end_of_year(Calendar.date()) :: Calendar.date()
@@ -339,11 +330,10 @@ defmodule Tox.Date do
       iex> Tox.Date.end_of_month(~D[2020-11-11])
       ~D[2020-11-30]
 
-      iex> ~D[2020-12-31]
-      ...> |> Date.convert!(Cldr.Calendar.Coptic)
-      ...> |> Tox.Date.shift(day: 1)
+      iex> ~D[2020-12-03]
+      ...> |> Date.convert!(Calendar.Holocene)
       ...> |> Tox.Date.end_of_month()
-      %Date{year: 1737, month: 4, day: 30, calendar: Cldr.Calendar.Coptic}
+      %Date{year: 12020, month: 12, day: 31, calendar: Calendar.Holocene}
 
   """
   @spec end_of_month(Calendar.date()) :: Calendar.date()
@@ -361,10 +351,9 @@ defmodule Tox.Date do
       ~D[2020-11-15]
 
       iex> ~D[2020-11-11]
-      ...> |> Date.convert!(Cldr.Calendar.Ethiopic)
+      ...> |> Date.convert!(Calendar.Holocene)
       ...> |> Tox.Date.end_of_week()
-      %Date{year: 2013, month: 3, day: 6, calendar: Cldr.Calendar.Ethiopic}
-
+      %Date{year: 12020, month: 11, day: 15, calendar: Calendar.Holocene}
   """
   @spec end_of_week(Calendar.date()) :: Calendar.date()
   def end_of_week(%{calendar: calendar, year: year, month: month, day: day} = date) do
