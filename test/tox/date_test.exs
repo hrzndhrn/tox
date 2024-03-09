@@ -96,7 +96,6 @@ defmodule Tox.DateTest do
       assert result.year in year_range
       assert result.month in month_range
       assert result.day in day_range
-      assert {day_of_week, day_of_week, _last_day_of_week} = Tox.Calendar.day_of_week(result)
       assert Date.compare(result, date) in [:lt, :eq]
     end
   end

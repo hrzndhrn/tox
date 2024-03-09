@@ -31,6 +31,14 @@ defmodule Tox.IntervalTest do
         )
       end
     end
+
+    test "raises error for invalid interval args" do
+      message = ~r/cannot create.*reason: :invalid_interval/
+
+      assert_raise ArgumentError, message, fn ->
+        Tox.Interval.new!(nil, nil)
+      end
+    end
   end
 
   describe "since_start/3" do
@@ -83,6 +91,24 @@ defmodule Tox.IntervalTest do
         )
 
       assert Tox.Interval.until_ending(interval, now) == :error
+    end
+  end
+
+  describe "next/1" do
+    test "returns next interval" do
+      interval =
+        Tox.Interval.new!(
+          DateTime.from_naive!(~N[2020-01-01 00:00:00.123456], "Europe/Berlin"),
+          DateTime.from_naive!(~N[2020-01-02 00:00:00.123456], "Europe/Berlin")
+        )
+
+      next =
+        Tox.Interval.new!(
+          DateTime.from_naive!(~N[2020-01-02 00:00:00.123456], "Europe/Berlin"),
+          DateTime.from_naive!(~N[2020-01-03 00:00:00.123456], "Europe/Berlin")
+        )
+
+      assert Tox.Interval.next(interval) == next
     end
   end
 
